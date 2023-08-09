@@ -1,0 +1,119 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Registration</h4>
+                      <p class="card-category">Complete form below</p>
+                  </div>
+                  <div class="card-body">
+                      <form  [formGroup]="registrationForm">
+                          <div class="row">
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width" >
+                                  <input  [formControlName]="fields.firstName"  [id]="fields.firstName"  matInput placeholder="Fist Name" type="text" required>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width" >
+                                  <input [formControlName]="fields.lastName"  [id]="fields.lastName" matInput placeholder="Last Name" type="text" required>
+                                </mat-form-field>
+                              </div>
+                            
+                          </div>
+                          <div class="row">
+                             <div class="col-md-6">
+                                  <mat-form-field class="example-full-width" >
+                                    <input [formControlName]="fields.idNumber"  [id]="fields.idNumber" matInput placeholder="ID Number" required>
+                                  </mat-form-field>
+                              </div>
+                              <div class="col-md-6">
+                                  <mat-form-field class="example-full-width" >
+                                    <input [formControlName]="fields.email"  [id]="fields.email" matInput placeholder="Email address" type="email" required>
+                                  </mat-form-field>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width" >
+                                <input [formControlName]="fields.cellphone"  [id]="fields.cellphone" matInput placeholder="Cell Phone" required>
+                              </mat-form-field>
+                          </div>
+                          <div class="col-md-6">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Course </mat-label>
+                            <mat-select required [formControlName]="fields.course" [id]="fields.course">
+                              <mat-option *ngFor="let course of Course" [value]="course" >{{course}}</mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                          </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                                 <mat-form-field class="example-full-width" >
+                                   <input [formControlName]="fields.amountPaid" [id]="fields.amountPaid" matInput placeholder="Amount Paid" required type="number">
+                                 </mat-form-field>
+                             </div>
+                             <div class="col-md-6">
+                                 <mat-form-field class="example-full-width" >
+                                  <input [formControlName]="fields.outstandingAmount"  [id]="fields.outstandingAmount"  matInput placeholder="Outstanding Amount" required type="number">
+                                 </mat-form-field>
+                             </div>
+                         </div>
+                         <div class="row">
+                          <div class="col-md-6">
+                            <mat-form-field class="example-full-width">
+                               <input [formControlName]="fields.streetAddress" [id]="fields.streetAddress" matInput placeholder="Street Address">
+                             </mat-form-field>
+                          </div>
+                          <div class="col-md-3">
+                            <mat-form-field class="example-full-width" >
+                             <input [formControlName]="fields.city" [id]="fields.city" matInput placeholder="City" required type="text">
+                            </mat-form-field>
+                        </div>
+                      </div>
+                          <div class="row">
+                              <div class="col-md-4">
+                                <mat-form-field class="example-full-width">
+                                  <input [formControlName]="fields.line1" [id]="fields.line1" matInput placeholder="Address line 1" type="text">
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-4">
+                                <mat-form-field class="example-full-width">
+                                  <input  [formControlName]="fields.line2" [id]="fields.line2"  matInput placeholder="Address line 2" type="text">
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-4">
+                                <mat-form-field class="example-full-width">
+                                  <input  [formControlName]="fields.postalCode" [id]="fields.postalCode" matInput placeholder="Postal Code" type="text">
+                                </mat-form-field>
+                              </div>
+                          </div>
+                         
+                          <button mat-raised-button type="submit" class="btn btn-info pull-right button"  (click)="createRegistration()">Submit</button>
+                          <div class="clearfix"></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          <!-- <div class="col-md-4">
+              <div class="card card-profile">
+                  <div class="card-avatar">
+                      <a href="javascript:void(0)">
+                          <img class="img" src="./assets/img/faces/marc.jpg" />
+                      </a>
+                  </div>
+                  <div class="card-body">
+                      <h6 class="card-category text-gray">CEO / Co-Founder</h6>
+                      <h4 class="card-title">Alec Thompson</h4>
+                      <p class="card-description">
+                          Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                      </p>
+                      <a href="javascript:void(0)" class="btn btn-danger btn-round">Follow</a>
+                  </div>
+              </div>
+          </div> -->
+      </div>
+  </div>
+</div>
