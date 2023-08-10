@@ -1,5 +1,6 @@
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { IconsComponent } from '../../icons/icons.component';
+import { LoginFormComponent } from 'app/components/login/login-form.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { Routes } from '@angular/router';
@@ -59,4 +60,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
+    { path: 'login',  component: LoginFormComponent },
 ];

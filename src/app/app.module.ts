@@ -1,4 +1,5 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import {
@@ -6,20 +7,18 @@ import {
 } from '@agm/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
+import { AuthInterceptor } from './components/login/services/auth.intercepter';
+import { AuthenticationService } from './components/login/services/authentication.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HostService } from './service/bhaki-service';
-import { HttpClientModule } from '@angular/common/http';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NgModule } from '@angular/core';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { RouterModule } from '@angular/router';
-import { TableListComponent } from './table-list/table-list.component';
-import { TypographyComponent } from './typography/typography.component';
-import { UpgradeComponent } from './upgrade/upgrade.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { TokenStorageService } from './components/login/services/token-storage.service';
 
 @NgModule({
   imports: [
@@ -39,7 +38,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     AdminLayoutComponent,
 
   ],
-  providers: [HostService],
+  providers: [HostService, AuthenticationService,TokenStorageService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
