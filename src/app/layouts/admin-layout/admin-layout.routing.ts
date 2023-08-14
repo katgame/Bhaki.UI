@@ -1,4 +1,5 @@
 import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { FindRegistrationComponent } from 'app/registration-find/registration-find.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
@@ -48,15 +49,16 @@ export const AdminLayoutRoutes: Routes = [
     //     path: '',
     //     children: [ {
     //         path: 'upgrade',
-    //         component: UpgradeComponent
+    //         component: FindRegistrationComponent
     //     }]
     // }
     { path: 'dashboard',      component: DashboardComponent },
+    { path: 'find-registrion',      component: FindRegistrationComponent },
     { path: 'registration',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
-    { path: 'upgrade',        component: UpgradeComponent },
+    { path: 'courses',        component: NotificationsComponent },
+    { path: 'branches',       component: UpgradeComponent },
 ];
