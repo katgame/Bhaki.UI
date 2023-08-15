@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-registration-find',
-  templateUrl: './registration-find.component.html',
-  styleUrls: ['./registration-find.component.css']
+  selector: 'app-registration-all',
+  templateUrl: './registration-all.component.html',
+  styleUrls: ['./registration-all.component.css']
 })
-export class FindRegistrationComponent implements OnInit {
+export class AllRegistrationComponent implements OnInit {
   showResults:boolean = false
   constructor() { }
 

@@ -7,6 +7,7 @@ import {
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HostService } from './service/bhaki-service';
@@ -24,6 +25,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 @NgModule({
   imports: [
     BrowserAnimationsModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

@@ -1,4 +1,7 @@
+import { AddBranchComponent } from 'app/branch-add/branch-add.component';
+import { AllRegistrationComponent } from 'app/registration-all/registration-all.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { FindBranchComponent } from 'app/branch-find/branch-find.component';
 import { FindRegistrationComponent } from 'app/registration-find/registration-find.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
@@ -49,11 +52,14 @@ export const AdminLayoutRoutes: Routes = [
     //     path: '',
     //     children: [ {
     //         path: 'upgrade',
-    //         component: FindRegistrationComponent
+    //         component: FindBranchComponent
     //     }]
     // }
     { path: 'dashboard',      component: DashboardComponent },
-    { path: 'find-registrion',      component: FindRegistrationComponent },
+    { path: 'find-registration',      component: FindRegistrationComponent },
+    { path: 'all-registrations',      component: AllRegistrationComponent },
+    { path: 'add-branch',      component: AddBranchComponent },
+    { path: 'find-branch',      component: FindBranchComponent },
     { path: 'registration',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
