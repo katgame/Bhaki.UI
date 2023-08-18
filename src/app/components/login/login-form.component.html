@@ -1,0 +1,36 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Login</h4>
+                  </div>
+                  <div class="card-body">
+                      <form [formGroup]="loginForm">
+                        
+                            <div class="row">
+                              <div class="col-md-6 colomns">
+                                <mat-form-field class="example-full-width" >
+                                  <input  [formControlName]="fields.email"  [id]="fields.email"  matInput placeholder="eMail Address" type="text" required>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6 colomns">
+                                <mat-form-field class="example-full-width" >
+                                  <input [formControlName]="fields.password"  [id]="fields.password" matInput placeholder="Password" type="password" required>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                        
+                          <button mat-raised-button type="submit" (click)="onLogin()" style="margin-top: 1rem; align-self: center;" class="btn btn-info center button"  >Login</button>
+                          <p></p>
+                      </form>
+                  </div>
+              </div>
+          </div>
+        
+      </div>
+  </div>
+</div>

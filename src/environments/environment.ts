@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  bhakiApi: 'http://localhost:5027/',  
+  bhakiApi: 'https://localhost:44382/',  
 };

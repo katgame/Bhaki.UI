@@ -1,3 +1,13 @@
 .button {
     margin-top: 2rem !important;
 }
+.btn-cancel {
+    background-color: #d50000 !important;
+}
+.btn-submit {
+    background-color: #000 !important;
+}
+.card-profile .card-avatar img {
+    height: auto;
+    visibility: hidden;
+}

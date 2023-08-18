@@ -1,0 +1,102 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Registration Filters</h4>
+                  </div>
+                  <div class="card-body">
+                      <form [formGroup]="reportsForm">
+                        <div class="row">
+                          <div class="col-md-6">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Branch </mat-label>
+                          <mat-select required [formControlName]="fields.branch" [id]="fields.branch" >
+                            <mat-option *ngFor="let branch of Branch" [value]="branch.name" (click)="validateBranchSelection(branch)">{{branch.name}}</mat-option>
+                          </mat-select>
+                          </mat-form-field>
+                          <input #enableDateRange id="enableDateRange"  type="checkbox" aria-label="enable filters" [formControlName]="fields.dateRange"  [id]="fields.dateRange"  placeholder="End Date" [checked]="dateRangeChecked"  (change)="dateRangeChange(enableDateRange.checked)"/>
+                          <label style="padding-left: 5px;">Enable date range</label>
+                          </div>
+                        </div>
+                          <div class="row">
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width" >
+                                  <input  [formControlName]="fields.startDate"  [id]="fields.startDate"  matInput placeholder="Start Date" type="date" required>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-md-6">
+                                <mat-form-field class="example-full-width" >
+                                  <input [formControlName]="fields.endDate"  [id]="fields.endDate" matInput placeholder="End Date" type="date" required>
+                                </mat-form-field>
+                              </div>
+                          </div>
+                        
+                          <input #filterCheckBox id="filterCheckBox"  type="checkbox" aria-label="enable filters"  placeholder="End Date" [checked]="true"  (change)="filterChange(filterCheckBox.checked)"/>
+                          <label style="padding-left: 5px;">Get all branch registrations</label>
+                          <button mat-raised-button type="submit" (click)="Search()" class="btn btn-info pull-right button"  >Search</button>
+                          <div class="clearfix"></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title ">Search Results</h4>
+              
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>
+                                    Registration No.
+                                </th>
+                                <th>
+                                    Student Name
+                                </th>
+                                <th>
+                                    Registration Date
+                                </th>
+                                <th>
+                                    Registered By
+                                </th>
+                                <th>
+                                    Course Name
+                                </th>
+                                <th>
+                                    Branch Name
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of results">
+                                    <td>
+                                        {{item.registrationNumber}}
+                                    </td>
+                                    <td>
+                                        {{item.studentName}}
+                                    </td>
+                                    <td>
+                                        {{item.registrationDate}}
+                                    </td>
+                                    <td>
+                                        {{item.createBy.name}}
+                                    </td>
+                                    <td>
+                                        {{item.course}}
+                                    </td>
+                                    <td>
+                                        {{item.branch.name}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>

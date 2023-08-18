@@ -1,0 +1,22 @@
+.login-container{
+  max-width: 400px; 
+  margin: 60px auto 0;
+}
+
+.error{
+  color: tomato; 
+  font-size: 12px; 
+  padding-top: 4px
+}
+
+.container-fluid {
+  margin-top: 15rem;
+  max-width :initial;
+  @media screen and (min-width: 768px) {
+   max-width: 45%;
+  }
+}
+
+.colomns{
+  padding-top: 1.5rem;
+}
