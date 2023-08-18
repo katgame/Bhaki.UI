@@ -1,11 +1,13 @@
 import * as uuid from 'uuid';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { HostService } from 'app/service/bhaki-service';
+import { TokenStorageService } from './../components/login/services/token-storage.service';
 
 declare var $: any;
+
 
 const IdExpress =
   /^(((\d{2}((0[13578]|1[02])(0[1-9]|[12]\d|3[01])|(0[13456789]|1[012])(0[1-9]|[12]\d|30)|02(0[1-9]|1\d|2[0-8])))|([02468][048]|[13579][26])0229))(( |-)(\d{4})( |-)(\d{3})|(\d{7}))/;
@@ -17,12 +19,14 @@ const form = new FormGroup({
   email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
   course: new FormControl({ value: '', disabled: false }, [Validators.required]),
   amountPaid: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  outstandingAmount: new FormControl({ value: '', disabled: false }, [Validators.required]),
+  outstandingAmount: new FormControl({ value: '', disabled: true }, [Validators.required]),
   streetAddress: new FormControl({ value: '', disabled: false }, [Validators.required]),
   line1: new FormControl({ value: '', disabled: false }, [Validators.required]),
   line2: new FormControl({ value: '', disabled: false }, [Validators.required]),
   city: new FormControl({ value: '', disabled: false }, [Validators.required]),
   postalCode: new FormControl({ value: '', disabled: false }, [Validators.required]),
+  idDocument: new FormControl({ value: '', disabled: false }, [Validators.required]),
+  branch: new FormControl({ value: '', disabled: false }, [Validators.required]),
 
 });
 
@@ -32,7 +36,14 @@ const form = new FormGroup({
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  Course: any = ['Training', 'Fire Arm', 'Mega License'];
+  @ViewChild('fileInput') fileInput: ElementRef;
+  private base64textString:String="";
+  documentFile: any;
+  Course: any = [];
+  Branch: any = [];
+  selectedBranch: any;
+  outstandingAmount: any;
+  userInfo: any;
   public fields = {
     idNumber: 'idNumber',
     cellphone: 'cellphone',
@@ -46,9 +57,17 @@ export class UserProfileComponent implements OnInit {
     email: 'email',
     lastName: 'lastName',
     firstName: 'firstName',
-    course: 'course'
+    course: 'course',
+    idDocument: 'idDocument',
+    branch : 'branch',
+
   };
-  constructor(private bhakiService: HostService) { }
+  constructor(private bhakiService: HostService, private tokenService: TokenStorageService) {
+    this.getBranches();
+    this.getCourses();
+    this.userInfo = this.tokenService.getUser();
+   // this.fileInput.nativeElement.value = null;
+   }
   public registrationForm = form;
   ngOnInit() {
   }
@@ -56,16 +75,20 @@ export class UserProfileComponent implements OnInit {
 
     if(!this.registrationForm.valid) {  this.showNotification('bottom','center', 'Please complete all information', 'danger' );
     return;}
+    const courseId = this.Course.filter(x => x.name === this.registrationForm.value.course)[0].id;
     const request = {
+      branchId:  this.selectedBranch.id,
+      courseId:  courseId,
       name :	this.registrationForm.value.firstName,
       surname	:	this.registrationForm.value.lastName,
       idNumber	:	this.registrationForm.value.idNumber,
-      idDocument	:	'',
+      idDocument	:	this.documentFile,
       emailAddress	:	this.registrationForm.value.email,
       cellphone	:	this.registrationForm.value.cellphone,
       courseName	:	this.registrationForm.value.course,
       amountPaid	:	this.registrationForm.value.amountPaid,
-      balance	:	this.registrationForm.value.outstandingAmount,
+      balance	:	this.outstandingAmount,
+      createdBy: this.userInfo.id,
       address :	{
         id	:	uuid.v4(),
         streetName	:	this.registrationForm.value.streetAddress,
@@ -78,9 +101,7 @@ export class UserProfileComponent implements OnInit {
 
     this.bhakiService.createRegitration(request).subscribe({
       next: (res) => {
-       // console.log(res);
         this.showNotification('bottom','center', 'Your registration was successful </b> registration number :' + res , 'success');
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
       },
       error: () => {
         //this.store.dispatch(esimActions.setLoading({ loading: false }));
@@ -90,6 +111,71 @@ export class UserProfileComponent implements OnInit {
     );
   }
 
+  getBranches() {
+    this.bhakiService.getBranches().subscribe({
+      next: (res) => {
+          this.Branch = res;
+      },
+      error: () => {
+        //this.store.dispatch(esimActions.setLoading({ loading: false }));
+       // this.router.navigate(['activate-fallout']);
+      },
+    }
+    );
+  }
+
+  getOustandingAmount() {
+    const amountPaid = this.registrationForm.value.amountPaid;
+    const coursePrice = this.Course.filter(x => x.name === this.registrationForm.value.course)[0].price;
+    this.outstandingAmount = Number(coursePrice) - Number(amountPaid);
+  } 
+
+  getCourses() {
+    this.bhakiService.getCourses().subscribe({
+      next: (res) => {
+          this.Course = res;
+      },
+      error: () => {
+        //this.store.dispatch(esimActions.setLoading({ loading: false }));
+       // this.router.navigate(['activate-fallout']);
+      },
+    }
+    );
+  }
+
+  validateBranchSelection(branch: any) {
+    if (this.registrationForm.get('branch')?.value) {
+      this.selectedBranch = branch;
+      if(branch.id !== this.userInfo.branchId) {
+        this.showNotification('bottom','center', 'Please note: The branch selected is not the branch you are registered to.' , 'warning');
+      }
+    }
+  }
+  _handleReaderLoaded(readerEvt) {
+    var binaryString = readerEvt.target.result;
+           this.base64textString= btoa(binaryString);
+           this.documentFile = btoa(binaryString);
+           console.log(btoa(binaryString));
+   }
+  
+  onFileSelect(event: any) {
+    var files = event.target.files;
+    var file = files[0];
+  
+  if (files && file) {
+      var reader = new FileReader();
+
+      reader.onload =this._handleReaderLoaded.bind(this);
+
+      reader.readAsBinaryString(file);
+  }
+  }
+  uploadImage(componentId, image) {
+    const formData: FormData = new FormData();
+    formData.append('Image', image, image.name);
+    formData.append('ComponentId', componentId);
+ //   return this.http.post('/api/dashboard/UploadImage', formData);
+}
   showNotification(from, align, message, colorType){
     const type = ['','info','success','warning','danger'];
 

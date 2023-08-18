@@ -14,6 +14,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NgModule } from '@angular/core';
 import { NotificationsComponent } from '../../notifications/notifications.component';
+import { ReportsComponent } from 'app/components/reports/reports.component';
 import { RouterModule } from '@angular/router';
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
@@ -37,6 +38,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    ReportsComponent,
     TypographyComponent,
     IconsComponent,
     MapsComponent,

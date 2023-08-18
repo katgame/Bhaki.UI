@@ -16,6 +16,7 @@ import { HostService } from './service/bhaki-service';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NgModule } from '@angular/core';
+import { NotificationService } from './service/notificationService';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { RouterModule } from '@angular/router';
 import { TokenStorageService } from './components/login/services/token-storage.service';
@@ -38,7 +39,7 @@ import { TokenStorageService } from './components/login/services/token-storage.s
     AdminLayoutComponent,
 
   ],
-  providers: [HostService, AuthenticationService,TokenStorageService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [HostService, NotificationService, AuthenticationService,TokenStorageService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

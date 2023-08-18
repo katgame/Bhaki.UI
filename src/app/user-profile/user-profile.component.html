@@ -9,6 +9,16 @@
                   </div>
                   <div class="card-body">
                       <form  [formGroup]="registrationForm">
+                        <div class="row">
+                          <div class="col-md-6">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Branch </mat-label>
+                          <mat-select required [formControlName]="fields.branch" [id]="fields.branch" >
+                            <mat-option *ngFor="let branch of Branch" [value]="branch.name" (click)="validateBranchSelection(branch)">{{branch.name}}</mat-option>
+                          </mat-select>
+                          </mat-form-field>
+                          </div>
+                        </div>
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width" >
@@ -44,7 +54,7 @@
                             <mat-form-field class="example-full-width">
                               <mat-label>Course </mat-label>
                             <mat-select required [formControlName]="fields.course" [id]="fields.course">
-                              <mat-option *ngFor="let course of Course" [value]="course" >{{course}}</mat-option>
+                              <mat-option *ngFor="let course of Course" [value]="course.name" >{{course.name }} - R {{course.price}}</mat-option>
                             </mat-select>
                             </mat-form-field>
                           </div>
@@ -52,12 +62,12 @@
                           <div class="row">
                             <div class="col-md-6">
                                  <mat-form-field class="example-full-width" >
-                                   <input [formControlName]="fields.amountPaid" [id]="fields.amountPaid" matInput placeholder="Amount Paid" required type="number">
+                                   <input [formControlName]="fields.amountPaid" (focusout)="getOustandingAmount()" [id]="fields.amountPaid" matInput placeholder="Amount Paid" required type="number">
                                  </mat-form-field>
                              </div>
                              <div class="col-md-6">
                                  <mat-form-field class="example-full-width" >
-                                  <input [formControlName]="fields.outstandingAmount"  [id]="fields.outstandingAmount"  matInput placeholder="Outstanding Amount" required type="number">
+                                  <input [formControlName]="fields.outstandingAmount" disabled [id]="fields.outstandingAmount" [value]="outstandingAmount"  matInput placeholder="Outstanding Amount" required type="number">
                                  </mat-form-field>
                              </div>
                          </div>
@@ -90,7 +100,11 @@
                                 </mat-form-field>
                               </div>
                           </div>
-                         
+                          <div class="row">
+                            <div class="col-md-4">
+                              <input type="file" [formControlName]="fields.idDocument" [id]="fields.idDocument" #fileInput placeholder="Upload ID Document"  (change)="onFileSelect($event)" [(ngModel)]="documentFile"/>
+                            </div>
+                        </div>
                           <button mat-raised-button type="submit" class="btn btn-info pull-right button"  (click)="createRegistration()">Submit</button>
                           <div class="clearfix"></div>
                       </form>

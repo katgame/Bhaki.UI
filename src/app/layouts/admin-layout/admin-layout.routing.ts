@@ -3,6 +3,7 @@ import { IconsComponent } from '../../icons/icons.component';
 import { LoginFormComponent } from 'app/components/login/login-form.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
+import { ReportsComponent } from '../../components/reports/reports.component';
 import { Routes } from '@angular/router';
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
@@ -53,6 +54,7 @@ export const AdminLayoutRoutes: Routes = [
     //     }]
     // }
     { path: 'dashboard',      component: DashboardComponent },
+    { path: 'reports',      component: ReportsComponent },
     { path: 'registration',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
