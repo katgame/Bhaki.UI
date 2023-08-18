@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
+
+import { Component, OnInit } from '@angular/core';
+
+import { HostService } from 'app/service/bhaki-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,8 +10,54 @@ import * as Chartist from 'chartist';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  Branch: any = [];
+  Dashboard: any = [];
+  results : any;
+  constructor(private bhakiService: HostService) { 
+    this.getBranches();
+    this.getDashboard();
+    this.getAllRegistration();
+  }
+  getAllRegistration() {
+    this.bhakiService.getAllRegistrations().subscribe({
+      next: (res) => {
+          this.results = res;
+          console.log(this.results);
+      },
+      error: () => {
+        //this.store.dispatch(esimActions.setLoading({ loading: false }));
+       // this.router.navigate(['activate-fallout']);
+      },
+    }
+    );
+  }
+  getBranches() {
+    this.bhakiService.getBranchesForDashBoard().subscribe({
+      next: (res) => {
+          this.Branch = res;
+          console.log(res);
+      },
+      error: (err) => {
+      console.log(err);
+      },
+    }
+    );
+  }
 
-  constructor() { }
+  getDashboard() {
+    this.bhakiService.getDashBoard().subscribe({
+      next: (res) => {
+          this.Dashboard = res;
+          this.setLastWeekStats(res.lastWeekStats);
+          this.seCureentWeekStats(res.currentWeekStats);
+          console.log(res);
+      },
+      error: (err) => {
+      console.log(err);
+      },
+    }
+    );
+  }
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -65,65 +114,68 @@ export class DashboardComponent implements OnInit {
 
       seq2 = 0;
   };
+
+  setLastWeekStats(data) {
+      /* ----------==========     Daily Registrations Chart initialization For Documentation    ==========---------- */
+
+      const dataDailyRegistrationChart: any = {
+        labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+        series: [
+          data
+        ]
+    };
+
+   const optionsDailyRegistrationChart: any = {
+        lineSmooth: Chartist.Interpolation.cardinal({
+            tension: 0
+        }),
+        low: 0,
+        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
+    }
+
+    var dailyRegistrationChart = new Chartist.Line('#dailyRegistrationChart', dataDailyRegistrationChart, optionsDailyRegistrationChart);
+
+    this.startAnimationForLineChart(dailyRegistrationChart);
+
+  }
+
+  seCureentWeekStats(data) {
+    /* ----------==========     Daily Registrations Chart initialization For Documentation    ==========---------- */
+
+    const dataDailyRegistrationChart: any = {
+      labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+      series: [
+        data
+      ]
+  };
+
+ const optionsDailyRegistrationChart: any = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+          tension: 0
+      }),
+      low: 0,
+      high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
+  }
+
+  var dailyRegistrationChart = new Chartist.Line('#currentRegistrationChart', dataDailyRegistrationChart, optionsDailyRegistrationChart);
+
+  this.startAnimationForLineChart(dailyRegistrationChart);
+
+}
   ngOnInit() {
-      /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
+    
+      /* ----------==========     Monthly registrations Chart initialization    ==========---------- */
 
-      const dataDailySalesChart: any = {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-          series: [
-              [12, 17, 7, 17, 23, 18, 38]
-          ]
-      };
-
-     const optionsDailySalesChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
-      }
-
-      var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-      this.startAnimationForLineChart(dailySalesChart);
-
-
-      /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
-
-      const dataCompletedTasksChart: any = {
-          labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
-          series: [
-              [230, 750, 450, 300, 280, 240, 200, 190]
-          ]
-      };
-
-     const optionsCompletedTasksChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0}
-      }
-
-      var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
-
-      // start animation for the Completed Tasks Chart - Line Chart
-      this.startAnimationForLineChart(completedTasksChart);
-
-
-
-      /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
-      var datawebsiteViewsChart = {
+      var dataMonthlyRegistrationChart = {
         labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
         series: [
           [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
 
         ]
       };
-      var optionswebsiteViewsChart = {
+      var optionsMonthlyRegistrationChart = {
           axisX: {
               showGrid: false
           },
@@ -141,10 +193,10 @@ export class DashboardComponent implements OnInit {
           }
         }]
       ];
-      var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
+      var MonthlyRegistrationChart = new Chartist.Bar('#MonthlyRegistrationChart', dataMonthlyRegistrationChart, optionsMonthlyRegistrationChart, responsiveOptions);
 
       //start animation for the Emails Subscription Chart
-      this.startAnimationForBarChart(websiteViewsChart);
+      this.startAnimationForBarChart(MonthlyRegistrationChart);
   }
 
 }

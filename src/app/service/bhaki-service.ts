@@ -36,6 +36,20 @@ export class HostService {
     };
     return this.httpClient.get(this.hostService + 'api/Branch/get-all-branches', httpOptions);
   }
+
+  public getBranchesForDashBoard(): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Branch/get-all-branches-for-report', httpOptions);
+  }
+
+  public getDashBoard(): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Registration/get-dashboard', httpOptions);
+  }
   public getBranchRegistrationsByRangeAndBranch(startdate: any, enddate: any, branchId : any): Observable<any> {
     const headers = {
       ['Access-Control-Allow-Origin']: '*'

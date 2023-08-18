@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app.routing';
 import { AuthInterceptor } from './components/login/services/auth.intercepter';
 import { AuthenticationService } from './components/login/services/authentication.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HostService } from './service/bhaki-service';
@@ -24,6 +25,7 @@ import { TokenStorageService } from './components/login/services/token-storage.s
 @NgModule({
   imports: [
     BrowserAnimationsModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

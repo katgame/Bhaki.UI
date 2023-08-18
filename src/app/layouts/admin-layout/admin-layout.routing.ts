@@ -1,4 +1,8 @@
+import { AddBranchComponent } from 'app/branch-add/branch-add.component';
+import { AllRegistrationComponent } from 'app/registration-all/registration-all.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { FindBranchComponent } from 'app/branch-find/branch-find.component';
+import { FindRegistrationComponent } from 'app/registration-find/registration-find.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { LoginFormComponent } from 'app/components/login/login-form.component';
 import { MapsComponent } from '../../maps/maps.component';
@@ -50,11 +54,15 @@ export const AdminLayoutRoutes: Routes = [
     //     path: '',
     //     children: [ {
     //         path: 'upgrade',
-    //         component: UpgradeComponent
+    //         component: FindBranchComponent
     //     }]
     // }
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'reports',      component: ReportsComponent },
+    { path: 'find-registration',      component: FindRegistrationComponent },
+    { path: 'all-registrations',      component: AllRegistrationComponent },
+    { path: 'add-branch',      component: AddBranchComponent },
+    { path: 'find-branch',      component: FindBranchComponent },
     { path: 'registration',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
@@ -63,4 +71,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',  component: LoginFormComponent },
+    { path: 'courses',        component: NotificationsComponent },
+    { path: 'branches',       component: UpgradeComponent },
 ];

@@ -72,43 +72,50 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
   }
   createRegistration() {
-
-    if(!this.registrationForm.valid) {  this.showNotification('bottom','center', 'Please complete all information', 'danger' );
-    return;}
-    const courseId = this.Course.filter(x => x.name === this.registrationForm.value.course)[0].id;
-    const request = {
-      branchId:  this.selectedBranch.id,
-      courseId:  courseId,
-      name :	this.registrationForm.value.firstName,
-      surname	:	this.registrationForm.value.lastName,
-      idNumber	:	this.registrationForm.value.idNumber,
-      idDocument	:	this.documentFile,
-      emailAddress	:	this.registrationForm.value.email,
-      cellphone	:	this.registrationForm.value.cellphone,
-      courseName	:	this.registrationForm.value.course,
-      amountPaid	:	this.registrationForm.value.amountPaid,
-      balance	:	this.outstandingAmount,
-      createdBy: this.userInfo.id,
-      address :	{
-        id	:	uuid.v4(),
-        streetName	:	this.registrationForm.value.streetAddress,
-        line1	:	this.registrationForm.value.line1,
-        line2	:	this.registrationForm.value.line2,
-        city	:	this.registrationForm.value.city,
-        postalCode :	this.registrationForm.value.postalCode,
+    try {
+      if(!this.registrationForm.valid) {  this.showNotification('bottom','center', 'Please complete all information', 'danger' );
+      return;}
+      const courseId = this.Course.filter(x => x.name === this.registrationForm.value.course)[0].id;
+      const request = {
+        branchId:  this.selectedBranch.id,
+        courseId:  courseId,
+        name :	this.registrationForm.value.firstName,
+        surname	:	this.registrationForm.value.lastName,
+        idNumber	:	this.registrationForm.value.idNumber,
+        idDocument	:	this.documentFile,
+        emailAddress	:	this.registrationForm.value.email,
+        cellphone	:	this.registrationForm.value.cellphone,
+        courseName	:	this.registrationForm.value.course,
+        amountPaid	:	this.registrationForm.value.amountPaid,
+        balance	:	this.outstandingAmount,
+        createdBy: this.userInfo.id,
+        address :	{
+          id	:	uuid.v4(),
+          streetName	:	this.registrationForm.value.streetAddress,
+          line1	:	this.registrationForm.value.line1,
+          line2	:	this.registrationForm.value.line2,
+          city	:	this.registrationForm.value.city,
+          postalCode :	this.registrationForm.value.postalCode,
+        }
+        }
+  
+      this.bhakiService.createRegitration(request).subscribe({
+        next: (res) => {
+          this.registrationForm.reset();
+          this.showNotification('bottom','center', 'Your registration was successful </b> registration number :' + res , 'success');
+        },
+        error: () => {
+          //this.store.dispatch(esimActions.setLoading({ loading: false }));
+         // this.router.navigate(['activate-fallout']);
+        },
       }
-      }
-
-    this.bhakiService.createRegitration(request).subscribe({
-      next: (res) => {
-        this.showNotification('bottom','center', 'Your registration was successful </b> registration number :' + res , 'success');
-      },
-      error: () => {
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
-       // this.router.navigate(['activate-fallout']);
-      },
+      );
+    } catch(err) {
+     
+      this.showNotification('bottom','center', 'Please complete all information', 'danger' );
+      window.location.reload();
     }
-    );
+   
   }
 
   getBranches() {
