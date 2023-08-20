@@ -1,0 +1,107 @@
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Add User</h4>
+                  </div>
+                  <div class="card-body">
+                      <form [formGroup]="userForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width" >
+                                <input  [formControlName]="fields.userName"  [id]="fields.userName"  matInput placeholder="User Name" type="text" required>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width" >
+                                <input [formControlName]="fields.email"  [id]="fields.email" matInput placeholder="Email" type="email" required>
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width" >
+                                <input  [formControlName]="fields.password"  [id]="fields.password"  matInput placeholder="Password" type="password" required>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                              <mat-form-field class="example-full-width" >
+                                <input [formControlName]="fields.confirmPassword"  [id]="fields.confirmPassword" matInput placeholder="Confirm Password" type="password" required>
+                              </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Select Branch </mat-label>
+                          <mat-select required [formControlName]="fields.branch" [id]="fields.branch" >
+                            <mat-option *ngFor="let branch of Branch" [value]="branch.name" (click)="validateBranchSelection(branch)">{{branch.name}}</mat-option>
+                          </mat-select>
+                          </mat-form-field>
+                     
+                          </div>
+                          <div class="col-md-6">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Select Role </mat-label>
+                            <mat-select required [formControlName]="fields.role" [id]="fields.role" >
+                              <mat-option *ngFor="let role of Role" [value]="role.name" (click)="validateRole(role)">{{role.name}}</mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                       
+                            </div>
+                        </div>
+                        
+
+                          <button mat-raised-button type="submit" (click)="SaveUser()" class="btn btn-info pull-right button"  >Save</button>
+                          <div class="clearfix"></div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title ">Users</h4>
+              
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>
+                                    User Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of results">
+                                    <td>
+                                        {{item.userName}}
+                                    </td>
+                                    <td>
+                                        {{item.email}}
+                                    </td>
+                                    <td>
+                                        <button mat-icon-button (click)="DeleteUser(item.id)">
+                                            <mat-icon>delete</mat-icon>
+                                      </button>
+                                        <!-- <mat-icon  (click)="DeleteUser(item.id)">delete</mat-icon> -->
+                                        <!-- <button mat-raised-button type="submit"  class="btn btn-info  pull-right  button"  >Delete</button> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>

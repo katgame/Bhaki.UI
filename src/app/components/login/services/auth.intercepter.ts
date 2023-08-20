@@ -2,6 +2,7 @@ import {HTTP_INTERCEPTORS, HttpHandler, HttpInterceptor, HttpRequest} from '@ang
 import { catchError, map } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
+import { NotificationService } from 'app/service/notificationService';
 import { Router } from '@angular/router';
 import { TokenStorageService } from './token-storage.service';
 import { throwError } from 'rxjs';
@@ -10,7 +11,7 @@ const TOKEN_HEADER_KEY = 'Authorization';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    constructor(private token: TokenStorageService,private router: Router) {}
+    constructor(private token: TokenStorageService,private router: Router, private notification: NotificationService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         let authReq = req;
@@ -31,8 +32,8 @@ export class AuthInterceptor implements HttpInterceptor {
                 case 401:
                   this.router.navigate(['login-form']);
                   break;
-                case 404:
-                
+                case 403:
+                  this.notification.showNotification('bottom','center', 'You are not allowed to access this information' , 'danger');
                   break;
                 default:
                  

@@ -36,7 +36,18 @@ export class HostService {
     };
     return this.httpClient.get(this.hostService + 'api/Branch/get-all-branches', httpOptions);
   }
-
+  public addBranch(branch: any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.post(this.hostService + 'api/Branch/add-branch',branch, httpOptions);
+  }
+  public updateBranch(branch: any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.put(this.hostService + 'api/Branch/update-branch',branch, httpOptions);
+  }
   public getBranchesForDashBoard(): Observable<any> {
     const headers = {
       ['Access-Control-Allow-Origin']: '*'
@@ -49,6 +60,34 @@ export class HostService {
       ['Access-Control-Allow-Origin']: '*'
     };
     return this.httpClient.get(this.hostService + 'api/Registration/get-dashboard', httpOptions);
+  }
+
+  public registerUser(userInfo: any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.post(this.hostService + 'api/Authentication/register-user', userInfo, httpOptions);
+  }
+
+  public deleteUser(userId: string): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.delete(this.hostService + 'api/Authentication/delete-user/'+ userId, httpOptions);
+  }
+
+
+  public getUserRoles(): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Authentication/get-user-roles', httpOptions);
+  }
+  public getAllUsers(): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Authentication/all-user', httpOptions);
   }
   public getBranchRegistrationsByRangeAndBranch(startdate: any, enddate: any, branchId : any): Observable<any> {
     const headers = {
@@ -83,6 +122,19 @@ export class HostService {
       ['Access-Control-Allow-Origin']: '*'
     };
     return this.httpClient.get(this.hostService + 'api/Course/get-all-courses', httpOptions);
+  }
+
+  public addCourse(course: any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.post(this.hostService + 'api/Course/add-course',course, httpOptions);
+  }
+  public updateCourses(course: any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.put(this.hostService + 'api/Course/update-course',course, httpOptions);
   }
   public login(credentials): Observable<any> {
 

@@ -1,6 +1,8 @@
+import * as Chartist from 'chartist';
+
 import { Component, OnInit } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+import { HostService } from 'app/service/bhaki-service';
 
 @Component({
   selector: 'app-registration-find',
@@ -9,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class FindRegistrationComponent implements OnInit {
   showResults:boolean = false
+reportsForm: any;
   constructor() { }
 
   ngOnInit() {

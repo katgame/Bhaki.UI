@@ -20,6 +20,7 @@ import { NgModule } from '@angular/core';
 import { NotificationService } from './service/notificationService';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { RouterModule } from '@angular/router';
+import { SpinnerOverlayService } from './components/spinner/spinner-overlay.service';
 import { TokenStorageService } from './components/login/services/token-storage.service';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { TokenStorageService } from './components/login/services/token-storage.s
     HttpClientModule,
     ComponentsModule,
     RouterModule,
+    ReactiveFormsModule ,
     AppRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
@@ -41,7 +43,7 @@ import { TokenStorageService } from './components/login/services/token-storage.s
     AdminLayoutComponent,
 
   ],
-  providers: [HostService, NotificationService, AuthenticationService,TokenStorageService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [HostService,SpinnerOverlayService, NotificationService, AuthenticationService,TokenStorageService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
