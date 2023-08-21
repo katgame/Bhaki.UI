@@ -1,35 +1,64 @@
 import * as Chartist from 'chartist';
 
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
 import { HostService } from 'app/service/bhaki-service';
+import { NotificationService } from './../service/notificationService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit  {
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginatorPageSize') paginatorPageSize: MatPaginator;
+
   Branch: any = [];
   Dashboard: any = [];
   results : any;
-  constructor(private bhakiService: HostService) { 
+  displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
+  
+  dataSource :MatTableDataSource<any>;
+  constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService) { 
     this.getBranches();
     this.getDashboard();
     this.getAllRegistration();
+  }
+
+  ngAfterViewInit() {
+   this.dataSource.paginator = this.paginator;
   }
   getAllRegistration() {
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
           this.results = res;
+          if(res) {
+            this.dataSource = new MatTableDataSource(res); 
+            this.dataSource.paginator = this.paginator;
+          }
+      
+        //  this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
+         // this.dataSource.paginator = this.paginator;
           console.log(this.results);
       },
       error: () => {
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
-       // this.router.navigate(['activate-fallout']);
+          //this.notify.showNotification()
       },
     }
     );
+  }
+
+  selection(id: any) {
+    this.router.navigate(['view-registration', id.registrationNumber]);
+  }
+  regitrationPresent(value: any) : boolean{
+    if(value === null) { return false;}  else {return true;}
+   
+
   }
   getBranches() {
     this.bhakiService.getBranchesForDashBoard().subscribe({

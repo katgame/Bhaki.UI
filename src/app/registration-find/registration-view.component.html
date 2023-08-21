@@ -1,0 +1,127 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Registration Details</h4>
+                </div>
+                <div class="card-body" >
+                    <div class="col-md-9">
+                        <div class="row">
+
+                            <div style="display: inline-flex; "class="col-md-6" >
+                                <p> Registration Number: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.registrationNumber}}</p>
+                                </strong>
+                            </div>
+
+                            <div style="display: inline-flex; "class="col-md-6" >
+                                <p> Student Name: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.student.name}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Registration Date: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.createdOn | date: 'dd/MM/yyyy, h:mm a'}}</p>
+                                </strong>
+                            </div>
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Student Surname: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.student.surname}}</p>
+                                </strong>
+                            </div>
+                         
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Registration By: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.createBy.name}}</p>
+                                </strong>
+                            </div>
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Student Id Number: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.student.idNumber}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Paid Amount: </p> &nbsp;
+                                <strong>
+                                    <p>R{{result.registration.paidAmount}}</p>
+                                </strong>
+                            </div>
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Student eMail: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.registration.student.emailAddress}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;" class="col-md-6" >
+                                <p> Outstanding Amount: </p> &nbsp;
+                                <strong>
+                                    <p>R{{result.registration.outstandingAmount}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;" class="col-md-6" >
+                                <p> Registration Branch: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.branch.name}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="display: inline-flex;"class="col-md-6" >
+                                <p> Registration Course: </p> &nbsp;
+                                <strong>
+                                    <p>{{result.course.name}}</p>
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 3rem;">
+                            <div class="col-md-6" >
+                                <strong *ngIf="idDocument">
+                                    <p> Student ID Document </p>
+                                </strong>
+                                <img class="image" *ngIf="idDocument"  [src]="idDocument" [alt]="idDocument" />
+                                <strong *ngIf="!idDocument">
+                                    <p> No Document Uploaded </p>
+                                </strong>
+                               
+                            </div>
+                        </div>
+                        <!-- <button mat-raised-button type="submit" class="btn btn-submit pull-right button"  (click)="download()">Download Image</button> -->
+                    </div>
+                  
+                
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <ul class="mt-3 unstyled list-group">
+                        <li class="list-group-item list-group-item-action"><a href="#/registration"
+                                class="d-flex flex-row"><i class="material-icons mr-2">store</i> Add new
+                                registration</a></li>
+
+                        <li class="list-group-item list-group-item-action"><a href="#/reports"
+                                class="d-flex flex-row"><i class="material-icons mr-2">list</i>View all
+                                registrations</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

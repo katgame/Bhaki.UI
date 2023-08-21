@@ -82,12 +82,12 @@ public fields = {
     if(this.name === '' || this.description === '') {
       this.notify.showNotification('bottom','center', 'Please check your details' , 'danger');
     }  else {
-      if(this.branchForm.value.name != '') {
+      if(this.branchForm.value.name != '' && this.branchForm.value.name != null && this.branchForm.value.name != undefined ) {
         this.selectedBranch.name = this.branchForm.value.name;
       } else {
         this.selectedBranch.name = this.name;
       }
-      if(this.branchForm.value.description != '') {
+      if(this.branchForm.value.description  != '' && this.branchForm.value.description != null && this.branchForm.value.description != undefined ) {
         this.selectedBranch.description = this.branchForm.value.description;
       } else {
         this.selectedBranch.description = this.description;

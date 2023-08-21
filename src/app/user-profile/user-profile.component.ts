@@ -3,7 +3,10 @@ import * as uuid from 'uuid';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
+import { NotificationService } from 'app/service/notificationService';
+import { SpinnerOverlayService } from './../components/spinner/spinner-overlay.service';
 import { TokenStorageService } from './../components/login/services/token-storage.service';
 
 declare var $: any;
@@ -21,11 +24,11 @@ const form = new FormGroup({
   amountPaid: new FormControl({ value: '', disabled: false }, [Validators.required]),
   outstandingAmount: new FormControl({ value: '', disabled: true }, [Validators.required]),
   streetAddress: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  line1: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  line2: new FormControl({ value: '', disabled: false }, [Validators.required]),
+  line1: new FormControl({ value: '', disabled: false }),
+  line2: new FormControl({ value: '', disabled: false }),
   city: new FormControl({ value: '', disabled: false }, [Validators.required]),
   postalCode: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  idDocument: new FormControl({ value: '', disabled: false }, [Validators.required]),
+  idDocument: new FormControl({ value: '', disabled: false }),
   branch: new FormControl({ value: '', disabled: false }, [Validators.required]),
 
 });
@@ -37,6 +40,7 @@ const form = new FormGroup({
 })
 export class UserProfileComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
+  loading = false;
   private base64textString:String="";
   documentFile: any;
   Course: any = [];
@@ -62,16 +66,36 @@ export class UserProfileComponent implements OnInit {
     branch : 'branch',
 
   };
-  constructor(private bhakiService: HostService, private tokenService: TokenStorageService) {
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  constructor(private bhakiService: HostService,
+     private notify: NotificationService, 
+     private tokenService: TokenStorageService,private spinner: SpinnerOverlayService) {
     this.getBranches();
-    this.getCourses();
+    this.disableEditFields(false);
     this.userInfo = this.tokenService.getUser();
+    this.showSpinner.next(false);
+
+    this.loading = true;
    // this.fileInput.nativeElement.value = null;
    }
   public registrationForm = form;
   ngOnInit() {
+    this.showSpinner.subscribe((res) => {
+
+      this.hideSpinner = res;
+}
+);
+  }
+  numbersValidation(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+  }
+  console(data) {
+    console.log(data);
   }
   createRegistration() {
+    this.showSpinner.next(true);
     try {
       if(!this.registrationForm.valid) {  this.showNotification('bottom','center', 'Please complete all information', 'danger' );
       return;}
@@ -101,17 +125,17 @@ export class UserProfileComponent implements OnInit {
   
       this.bhakiService.createRegitration(request).subscribe({
         next: (res) => {
+          this.showSpinner.next(false);
           this.registrationForm.reset();
           this.showNotification('bottom','center', 'Your registration was successful </b> registration number :' + res , 'success');
         },
         error: () => {
-          //this.store.dispatch(esimActions.setLoading({ loading: false }));
-         // this.router.navigate(['activate-fallout']);
+          this.showSpinner.next(false);
         },
       }
       );
     } catch(err) {
-     
+      this.showSpinner.next(false);
       this.showNotification('bottom','center', 'Please complete all information', 'danger' );
       window.location.reload();
     }
@@ -124,27 +148,73 @@ export class UserProfileComponent implements OnInit {
           this.Branch = res;
       },
       error: () => {
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
-       // this.router.navigate(['activate-fallout']);
       },
     }
     );
   }
 
+  disableEditFields(enable:boolean) {
+    if(!enable) {
+      this.registrationForm.controls['firstName'].disable();
+      this.registrationForm.controls['lastName'].disable();
+      this.registrationForm.controls['idNumber'].disable();
+      this.registrationForm.controls['email'].disable();
+      this.registrationForm.controls['cellphone'].disable();
+
+      this.registrationForm.controls['course'].disable();
+      this.registrationForm.controls['amountPaid'].disable();
+    //  this.registrationForm.controls['outstandingAmount'].disable();
+      this.registrationForm.controls['streetAddress'].disable();
+      this.registrationForm.controls['city'].disable();
+
+      this.registrationForm.controls['line1'].disable();
+      this.registrationForm.controls['line2'].disable();
+      this.registrationForm.controls['postalCode'].disable();
+      this.registrationForm.controls['idDocument'].disable();
+     
+    } else {
+      this.registrationForm.controls['firstName'].enable();
+      this.registrationForm.controls['lastName'].enable();
+      this.registrationForm.controls['idNumber'].enable();
+      this.registrationForm.controls['email'].enable();
+      this.registrationForm.controls['cellphone'].enable();
+
+      this.registrationForm.controls['course'].enable();
+      this.registrationForm.controls['amountPaid'].enable();
+      //this.registrationForm.controls['outstandingAmount'].enable();
+      this.registrationForm.controls['streetAddress'].enable();
+      this.registrationForm.controls['city'].enable();
+
+      this.registrationForm.controls['line1'].enable();
+      this.registrationForm.controls['line2'].enable();
+      this.registrationForm.controls['postalCode'].enable();
+      this.registrationForm.controls['idDocument'].enable();
+    
+    }
+  
+  }
   getOustandingAmount() {
     const amountPaid = this.registrationForm.value.amountPaid;
     const coursePrice = this.Course.filter(x => x.name === this.registrationForm.value.course)[0].price;
     this.outstandingAmount = Number(coursePrice) - Number(amountPaid);
   } 
-
-  getCourses() {
-    this.bhakiService.getCourses().subscribe({
+  textValidation(event: any): boolean {
+    const charCode = event.keyCode;
+    return (charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8;
+  }
+  getCourses(branchId) {
+    this.bhakiService.getCourses(branchId).subscribe({
       next: (res) => {
+        if(res.length > 0)
+        {
           this.Course = res;
+          this.disableEditFields(true);
+        } else {
+          this.notify.showNotification('bottom','center', 'No Course available for this branch' , 'warning');
+        }
       },
       error: () => {
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
-       // this.router.navigate(['activate-fallout']);
+        this.notify.showNotification('bottom','center', 'No Course available for this branch' , 'danger');
       },
     }
     );
@@ -157,12 +227,12 @@ export class UserProfileComponent implements OnInit {
         this.showNotification('bottom','center', 'Please note: The branch selected is not the branch you are registered to.' , 'warning');
       }
     }
+    this.getCourses( this.selectedBranch.id)
   }
   _handleReaderLoaded(readerEvt) {
     var binaryString = readerEvt.target.result;
            this.base64textString= btoa(binaryString);
            this.documentFile = btoa(binaryString);
-           console.log(btoa(binaryString));
    }
   
   onFileSelect(event: any) {

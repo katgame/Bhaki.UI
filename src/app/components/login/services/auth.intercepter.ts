@@ -31,6 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
                   break;
                 case 401:
                   this.router.navigate(['login-form']);
+                  this.notification.showNotification('bottom','center', 'Unauthorized login! Please try again.' , 'danger');
                   break;
                 case 403:
                   this.notification.showNotification('bottom','center', 'You are not allowed to access this information' , 'danger');

@@ -13,8 +13,10 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatRippleModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NgModule } from '@angular/core';
 import { NotificationsComponent } from '../../notifications/notifications.component';
@@ -26,6 +28,7 @@ import { TypographyComponent } from '../../typography/typography.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { UserAddComponent } from 'app/components/user/user-add.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { ViewRegistrationComponent } from 'app/registration-find/registration-view.component';
 
 @NgModule({
   imports: [
@@ -40,6 +43,8 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
     MatSelectModule,
     MatTooltipModule,
     MatIconModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   declarations: [
     DashboardComponent,
@@ -55,7 +60,8 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
     AllBranchesComponent,
     UserAddComponent,
     BranchesEditComponent,
-    ManageCourseComponent
+    ManageCourseComponent,
+    ViewRegistrationComponent
   ],
   providers: [SpinnerOverlayService]
 })

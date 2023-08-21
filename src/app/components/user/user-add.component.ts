@@ -129,7 +129,22 @@ export class UserAddComponent implements OnInit {
     }
     );
   }
-
+  EnableUser(user: any) {
+    this.spinner.show('please wait');
+    this.bhakiService.enableUser(user).subscribe({
+      next: (res) => {
+        this.getAllUsers();
+        this.showNotification('bottom','center', 'User succesfully enabled' , 'success');
+        this.spinner.hide();
+      },
+      error: (err) => {
+        console.log(err);
+        this.showNotification('bottom','center', 'User could not be enabled' , 'danger');
+        this.spinner.hide();
+      },
+    }
+    );
+  }
   validateBranchSelection(branch: any) {
 
     this.selectedBranch = branch;

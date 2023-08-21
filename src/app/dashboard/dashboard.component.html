@@ -1,64 +1,70 @@
 <div class="main-content">
-  <div class="container-fluid">
-       <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let branch of Branch">
-            <div class="card card-stats" >
-                <div class="card-header card-header-danger card-header-icon">
-                    <div class="card-icon bg-danger">
-                        <i class="material-icons">store</i>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let branch of Branch">
+                <div class="card card-stats">
+                    <div class="card-header card-header-danger card-header-icon">
+                        <div class="card-icon bg-danger">
+                            <i class="material-icons">store</i>
+                        </div>
+                        <p class="card-category">{{branch.branch.name}}</p>
+                        <h3 class="card-title">{{branch.totalRegistrations}}</h3>
                     </div>
-                    <p class="card-category">{{branch.branch.name}}</p>
-                    <h3 class="card-title">{{branch.totalRegistrations}}</h3>
-                </div>
-                <div class="card-footer">
-                    <div class="stats">
-                        <i class="material-icons">date_range</i> Last {{branch.lastUpdate | date: 'dd/MM/yyyy'}}
+                    <div class="card-footer">
+                        <div class="stats" *ngIf="regitrationPresent(branch.lastUpdate)">
+                            <i class="material-icons">date_range</i> Last {{branch.lastUpdate | date: 'dd/MM/yyyy, h:mma'}}
+                        </div>
+                        <div class="stats" *ngIf="!regitrationPresent(branch.lastUpdate)">
+                            <i class="material-icons">date_range</i> No registrations
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4">
-              <div class="card card-chart">
-                  <div class="card-header card-header-danger">
-                      <div class="ct-chart" id="dailyRegistrationChart"></div>
-                  </div>
-                  <div class="card-body">
-                      <h4 class="card-title">Last Weeks Registrations</h4>
-                      <p class="card-category">
-                          <span class="text-success"> {{Dashboard.lastWeekTotal}} </span> total registrations last week.
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-chart">
+                    <div class="card-header card-header-danger">
+                        <div class="ct-chart" id="dailyRegistrationChart"></div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Last Weeks Registrations</h4>
+                        <p class="card-category">
+                            <span class="text-success"> {{Dashboard.lastWeekTotal}} </span> total registrations last
+                            week.
                         </p>
-                  </div>
-                  <div class="card-footer">
+                    </div>
+                    <!-- <div class="card-footer">
                       <div class="stats">
                           <i class="material-icons">access_time</i> updated 4 minutes ago
                       </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card card-chart">
-                <div class="card-header card-header-danger">
-                    <div class="ct-chart" id="currentRegistrationChart"></div>
+                  </div> -->
                 </div>
-                <div class="card-body">
-                    <h4 class="card-title">This Weeks Registrations</h4>
-                    <p class="card-category" *ngIf="Dashboard.increase">
-                        <span class="text-success" ><i class="fa fa-long-arrow-up"></i> {{Dashboard.growth}}% </span> increase in this weeks registrations.
-                    </p>
-                     <p class="card-category"*ngIf="!Dashboard.increase">
-                        <span class="text-danger" *ngIf="!Dashboard.increase"><i class="fa fa-long-arrow-down"></i> {{Dashboard.growth}}% </span> increase in this weeks registrations.
-                      </p>
-                </div>
-                <div class="card-footer">
+            </div>
+            <div class="col-md-4">
+                <div class="card card-chart">
+                    <div class="card-header card-header-danger">
+                        <div class="ct-chart" id="currentRegistrationChart"></div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">This Weeks Registrations</h4>
+                        <p class="card-category" *ngIf="Dashboard.increase">
+                            <span class="text-success"><i class="fa fa-long-arrow-up"></i> {{Dashboard.growth}}% </span>
+                            increase in this weeks registrations.
+                        </p>
+                        <p class="card-category" *ngIf="!Dashboard.increase">
+                            <span class="text-danger" *ngIf="!Dashboard.increase"><i class="fa fa-long-arrow-down"></i>
+                                {{Dashboard.growth}}% </span> increase in this weeks registrations.
+                        </p>
+                    </div>
+                    <!-- <div class="card-footer">
                     <div class="stats">
                         <i class="material-icons">access_time</i> updated 4 minutes ago
                     </div>
+                </div> -->
                 </div>
             </div>
-        </div>
-          <!-- <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <div class="card card-chart">
                   <div class="card-header card-header-danger">
                       <div class="ct-chart" id="MonthlyRegistrationChart"></div>
@@ -76,8 +82,8 @@
                   </div>
               </div>
           </div> -->
-          <!-- <div class="col-md-4"> -->
-              <!-- <div class="card card-chart">
+            <!-- <div class="col-md-4"> -->
+            <!-- <div class="card card-chart">
                   <div class="card-header card-header-danger">
                       <div class="ct-chart" id="completedTasksChart"></div>
                   </div>
@@ -91,10 +97,10 @@
                       </div>
                   </div>
               </div> -->
-          <!-- </div> -->
-      </div>
-      <div class="row">
-          <!-- <div class="col-lg-6 col-md-12">
+            <!-- </div> -->
+        </div>
+        <div class="row">
+            <!-- <div class="col-lg-6 col-md-12">
               <div class="card">
                   <div class="card-header card-header-tabs card-header-primary">
                       <div class="nav-tabs-navigation">
@@ -339,175 +345,125 @@
                   </div>
               </div>
           </div> -->
-          <div class="col-md-12">
-              <div class="card">
-                  <div class="card-header card-header-danger">
-                      <h4 class="card-title">Latest Registrations</h4>
-                      <p class="card-category">New registrations on September, 2023</p>
-                  </div>
-                  <div class="card-body table-responsive">
-                    <table class="table">
-                        <thead class=" text-primary">
-                            <th>
-                                Registration No.
-                            </th>
-                            <th>
-                                Student Name
-                            </th>
-                            <th>
-                                Registration Date
-                            </th>
-                            <th>
-                                Registered By
-                            </th>
-                            <th>
-                                Course Name
-                            </th>
-                            <th>
-                                Branch Name
-                            </th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of results">
-                                <td>
-                                    {{item.registrationNumber}}
-                                </td>
-                                <td>
-                                    {{item.studentName}}
-                                </td>
-                                <td>
-                                    {{item.registrationDate | date: 'dd/MM/yyyy'}}
-                                </td> 
-                                <td>
-                                    {{item.createBy.name}}
-                                </td>
-                                <td>
-                                    {{item.course}}
-                                </td>
-                                <td>
-                                    {{item.branch.name}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                  </div>
-                  <div class="card-footer d-flex justify-content-center">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                          </li>
-                          <li class="page-item"><a class="page-link" href="#">1</a></li>
-                          <li class="page-item"><a class="page-link" href="#">2</a></li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                          </li>
-                        </ul>
-                      </nav>
-                  </div>
-              </div>
-          </div>
-      </div> 
-  </div>
-</div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">Latest Registrations</h4>
+                        <p class="card-category">New registrations on September, 2023</p>
+                    </div>
+                    <!-- <div class="card-body table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>
+                                    Registration No.
+                                </th>
+                                <th>
+                                    Student Name
+                                </th>
+                                <th>
+                                    Registration Date
+                                </th>
+                                <th>
+                                    Registered By
+                                </th>
+                                <th>
+                                    Course Name
+                                </th>
+                                <th>
+                                    Branch Name
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of results">
+                                    <td>
+                                        {{item.registrationNumber}}
+                                    </td>
+                                    <td>
+                                        {{item.studentName}}
+                                    </td>
+                                    <td>
+                                        {{item.registrationDate | date: 'dd/MM/yyyy'}}
+                                    </td>
+                                    <td>
+                                        {{item.createBy.name}}
+                                    </td>
+                                    <td>
+                                        {{item.course}}
+                                    </td>
+                                    <td>
+                                        {{item.branch.name}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-<!-- <div class="main-content">
-    <div class="container-fluid">
-      <div class="card">
-          <div class="card-header card-header-danger">
-              <h4 class="card-title">Bhaki Security and Training</h4>
-              <p class="card-category">Security training acedemy</p>
-          </div>
-          <div class="card-body">
-              <div id="typography">
-                  <div class="card-title">
-                      <h2>Welcome...</h2>
-                  </div> -->
-                  <!-- <div class="row">
-                      <div class="tim-typo">
-                          <h1>
-                              <span class="tim-note">Header 1</span>The Life of Material Dashboard </h1>
-                      </div>
-                      <div class="tim-typo">
-                          <h2>
-                              <span class="tim-note">Header 2</span>The Life of Material Dashboard</h2>
-                      </div>
-                      <div class="tim-typo">
-                          <h3>
-                              <span class="tim-note">Header 3</span>The Life of Material Dashboard</h3>
-                      </div>
-                      <div class="tim-typo">
-                          <h4>
-                              <span class="tim-note">Header 4</span>The Life of Material Dashboard</h4>
-                      </div>
-                      <div class="tim-typo">
-                          <h5>
-                              <span class="tim-note">Header 5</span>The Life of Material Dashboard</h5>
-                      </div>
-                      <div class="tim-typo">
-                          <h6>
-                              <span class="tim-note">Header 6</span>The Life of Material Dashboard</h6>
-                      </div>
-                      <div class="tim-typo">
-                          <p>
-                              <span class="tim-note">Paragraph</span>
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at.</p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Quote</span>
-                          <blockquote class="blockquote">
-                              <p>
-                                  I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that’s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at.
-                              </p>
-                              <small>
-                                  Kanye West, Musician
-                              </small>
-                          </blockquote>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Muted Text</span>
-                          <p class="text-muted">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
-                          </p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Primary Text</span>
-                          <p class="text-primary">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Info Text</span>
-                          <p class="text-info">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Success Text</span>
-                          <p class="text-success">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Warning Text</span>
-                          <p class="text-warning">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers...
-                          </p>
-                      </div>
-                      <div class="tim-typo">
-                          <span class="tim-note">Danger Text</span>
-                          <p class="text-danger">
-                              I will be the leader of a company that ends up being worth billions of dollars, because I got the answers... </p>
-                      </div>
-                      <div class="tim-typo">
-                          <h2>
-                              <span class="tim-note">Small Tag</span>
-                              Header with small subtitle
-                              <br>
-                              <small>Use "small" tag for the headers</small>
-                          </h2>
-                      </div>
-                  </div> -->
-              <!-- </div>
-          </div>
-      </div>
-  </div>
-   -->
+                 
+                    </div> -->
+                    <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSource">
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="registrationNo">
+                                <th mat-header-cell *matHeaderCellDef> Registration No. </th>
+                                <td mat-cell *matCellDef="let element"> {{element.registrationNumber}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="studentName">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="registrationDate">
+                                <th mat-header-cell *matHeaderCellDef> Registration Date </th>
+                                <td mat-cell *matCellDef="let element"> {{element.registrationDate | date:
+                                    'dd/MM/yyyy'}} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="registeredBy">
+                                <th mat-header-cell *matHeaderCellDef> Registered By </th>
+                                <td mat-cell *matCellDef="let element"> {{element.createBy.name}} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="courseName">
+                                <th mat-header-cell *matHeaderCellDef> Course Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.course}} </td>
+                            </ng-container>
+                            <!-- Symbol Column -->
+
+                            <ng-container matColumnDef="branchName">
+                                <th mat-header-cell *matHeaderCellDef> Branch Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.branch.name}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row (click)="selection(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" [length]="results.length" [pageSize]="5" showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                    <!-- <div class="card-footer d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

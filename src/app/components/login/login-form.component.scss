@@ -10,13 +10,23 @@
 }
 
 .container-fluid {
-  margin-top: 15rem;
+  margin-top: 10rem;
   max-width :initial;
   @media screen and (min-width: 768px) {
    max-width: 45%;
   }
 }
 
+p {
+  margin-top: 0;
+  margin-bottom: 0rem;
+}
+
+.card-title {
+  font-size: 25px;
+  font-weight: 500;
+}
+
 .colomns{
-  padding-top: 1.5rem;
+ // padding-top: 1.5rem;
 }

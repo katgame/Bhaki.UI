@@ -22,12 +22,12 @@
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width" >
-                                  <input  [formControlName]="fields.firstName"  [id]="fields.firstName"  matInput placeholder="Fist Name" type="text" required>
+                                  <input  [formControlName]="fields.firstName"   (keypress)="textValidation($event)"  [id]="fields.firstName"  matInput placeholder="Fist Name" type="text" required>
                                 </mat-form-field>
                               </div>
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width" >
-                                  <input [formControlName]="fields.lastName"  [id]="fields.lastName" matInput placeholder="Last Name" type="text" required>
+                                  <input [formControlName]="fields.lastName"  (keypress)="textValidation($event)"  [id]="fields.lastName" matInput placeholder="Last Name" type="text" required>
                                 </mat-form-field>
                               </div>
                             
@@ -35,7 +35,7 @@
                           <div class="row">
                              <div class="col-md-6">
                                   <mat-form-field class="example-full-width" >
-                                    <input [formControlName]="fields.idNumber"  [id]="fields.idNumber" matInput placeholder="ID Number" required>
+                                    <input [formControlName]="fields.idNumber"  (keypress)="numbersValidation($event)"  [id]="fields.idNumber" matInput placeholder="ID Number" required>
                                   </mat-form-field>
                               </div>
                               <div class="col-md-6">
@@ -47,7 +47,7 @@
                           <div class="row">
                             <div class="col-md-6">
                               <mat-form-field class="example-full-width" >
-                                <input [formControlName]="fields.cellphone"  [id]="fields.cellphone" matInput placeholder="Cell Phone" required>
+                                <input [formControlName]="fields.cellphone"  (keypress)="numbersValidation($event)"  [id]="fields.cellphone" matInput placeholder="Cell Phone" required>
                               </mat-form-field>
                           </div>
                           <div class="col-md-6">
@@ -62,7 +62,7 @@
                           <div class="row">
                             <div class="col-md-6">
                                  <mat-form-field class="example-full-width" >
-                                   <input [formControlName]="fields.amountPaid" (focusout)="getOustandingAmount()" [id]="fields.amountPaid" matInput placeholder="Amount Paid" required type="number">
+                                   <input [formControlName]="fields.amountPaid"  (keypress)="numbersValidation($event)" (focusout)="getOustandingAmount()" [id]="fields.amountPaid" matInput placeholder="Amount Paid" required type="number">
                                  </mat-form-field>
                              </div>
                              <div class="col-md-6">
@@ -105,11 +105,9 @@
                               <input type="file" [formControlName]="fields.idDocument" [id]="fields.idDocument" #fileInput placeholder="Upload ID Document"  (change)="onFileSelect($event)" [(ngModel)]="documentFile"/>
                             </div>
                         </div>
-                          <!-- <button mat-raised-button type="submit" class="btn btn-info pull-right button"  (click)="createRegistration()">Submit</button> -->
-                          <button mat-raised-button type="submit" class="btn btn-submit pull-right button"  (click)="createRegistration()">Submit</button>
-                          <!-- <button mat-raised-button type="submit" class="btn btn-cancel pull-right button  btn-round"  (click)="createRegistration()">Cancel</button> -->
-                          
-                          <div class="clearfix"></div>
+                          <button mat-raised-button type="submit" class="btn btn-info pull-right button"  (click)="createRegistration()">Submit</button>
+                        
+                         
                       </form>
                   </div>
               </div>
@@ -121,6 +119,7 @@
                 <!-- <li class="list-group-item list-group-item-action"><a [routerLink]="'/find-registration'"  class="d-flex flex-row"><i class="material-icons mr-2">search</i> Find a registration</a></li> -->
                 <li class="list-group-item list-group-item-action"><a [routerLink]="'/reports'"  class="d-flex flex-row"><i class="material-icons mr-2">list</i>View all registrations</a></li>
               </ul>
+              <div *ngIf="hideSpinner" class="loader"></div>
             </div>   
           </div>
       </div>

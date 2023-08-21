@@ -3,14 +3,15 @@
       <div class="row">
           <div class="col-md-12">
               <div class="card">
-                  <div class="card-header card-header-danger">
-                      <h4 class="card-title">Login</h4>
+                  <div class="card-header" style="padding-top: 2rem;">
+                      <h4 class="card-title ">Login</h4>
                   </div>
                   <div class="card-body">
                       <form [formGroup]="loginForm">
                         
                             <div class="row">
                               <div class="col-md-6 colomns">
+                                <p>Please enter email address</p>
                                 <mat-form-field class="example-full-width" >
                                   <input  [formControlName]="fields.email"  [id]="fields.email"  matInput placeholder="eMail Address" type="text" required>
                                 </mat-form-field>
@@ -18,6 +19,7 @@
                             </div>
                             <div class="row">
                               <div class="col-md-6 colomns">
+                                <p>Please enter password</p>
                                 <mat-form-field class="example-full-width" >
                                   <input [formControlName]="fields.password"  [id]="fields.password" matInput placeholder="Password" type="password" required>
                                 </mat-form-field>

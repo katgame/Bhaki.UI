@@ -1,8 +1,8 @@
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Host } from './models/host';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Service } from './models/service';
 import { Tenant } from './models/tenant';
 import { environment } from 'environments/environment';
@@ -16,6 +16,7 @@ const httpOptions = {
 export class HostService {
 
   private hostService: string;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor(private httpClient: HttpClient, 
    ) {
     this.hostService = environment.bhakiApi
@@ -23,6 +24,7 @@ export class HostService {
 
   //HOst Session
   public createRegitration(request: any): Observable<any> {
+    this.showSpinner.next(true);
     const headers = {
       ['Access-Control-Allow-Origin']: '*'
     };
@@ -35,6 +37,13 @@ export class HostService {
       ['Access-Control-Allow-Origin']: '*'
     };
     return this.httpClient.get(this.hostService + 'api/Branch/get-all-branches', httpOptions);
+  }
+
+  public getRegistrationDetails(registrationNumber): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Registration/get-registration-details/' +registrationNumber , httpOptions);
   }
   public addBranch(branch: any): Observable<any> {
     const headers = {
@@ -74,6 +83,12 @@ export class HostService {
       ['Access-Control-Allow-Origin']: '*'
     };
     return this.httpClient.delete(this.hostService + 'api/Authentication/delete-user/'+ userId, httpOptions);
+  }
+  public enableUser(userId: string): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.put(this.hostService + 'api/Authentication/enable-user/'+ userId, httpOptions);
   }
 
 
@@ -117,11 +132,11 @@ export class HostService {
     };
     return this.httpClient.get(this.hostService + 'api/Registration/get-all-registrations-by-date/{start}/{end}' , httpOptions);
   }
-  public getCourses(): Observable<any> {
+  public getCourses(branchId): Observable<any> {
     const headers = {
       ['Access-Control-Allow-Origin']: '*'
     };
-    return this.httpClient.get(this.hostService + 'api/Course/get-all-courses', httpOptions);
+    return this.httpClient.get(this.hostService + 'api/Course/get-all-courses/' + branchId, httpOptions);
   }
 
   public addCourse(course: any): Observable<any> {

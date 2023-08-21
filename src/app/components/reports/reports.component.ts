@@ -1,9 +1,12 @@
 import * as uuid from 'uuid';
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
 import { HostService } from 'app/service/bhaki-service';
+import { Router } from '@angular/router';
 import { TokenStorageService } from '../login/services/token-storage.service';
 
 declare var $: any;
@@ -22,7 +25,11 @@ const form = new FormGroup({
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css']
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, AfterViewInit {
+  @ViewChild('paginator') paginator: MatPaginator;
+  dataSource :MatTableDataSource<any>;
+  displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
+  
 
   Branch: any = [];
   selectedBranch: any;
@@ -38,7 +45,7 @@ export class ReportsComponent implements OnInit {
     dateRange : 'dateRange'
 
   };
-  constructor(private bhakiService: HostService, private tokenService: TokenStorageService) {
+  constructor(private bhakiService: HostService, private tokenService: TokenStorageService,private router: Router) {
     this.getBranches();
     this.userInfo = this.tokenService.getUser();
     this.reportsForm.disable();
@@ -48,7 +55,9 @@ export class ReportsComponent implements OnInit {
    public reportsForm = form;
   ngOnInit() {
   }
-  
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+   }
   getBranches() {
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
@@ -60,7 +69,9 @@ export class ReportsComponent implements OnInit {
     }
     );
   }
-
+  selection(id: any) {
+    this.router.navigate(['view-registration', id.registrationNumber]);
+  }
   enableDateRange(enable: boolean) {
     if(!enable) {
         this.reportsForm.controls['startDate'].disable();
@@ -114,6 +125,10 @@ export class ReportsComponent implements OnInit {
           this.bhakiService.getBranchRegistrationsByRangeAndBranch( this.reportsForm.value.startDate, this.reportsForm.value.endDate,  this.selectedBranch.id).subscribe({
             next: (res) => {
               this.results = res;
+              if(res) {
+                this.dataSource = new MatTableDataSource(res); 
+                this.dataSource.paginator = this.paginator;
+              }
             },
             error: (err) => {
               console.log(err);
@@ -126,6 +141,10 @@ export class ReportsComponent implements OnInit {
           this.bhakiService.getAllRegistrationsByBranch(this.selectedBranch.id).subscribe({
             next: (res) => {
               this.results = res;
+              if(res) {
+                this.dataSource = new MatTableDataSource(res); 
+                this.dataSource.paginator = this.paginator;
+              }
             },
             error: (err) => {
               console.log(err);
@@ -147,7 +166,10 @@ export class ReportsComponent implements OnInit {
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
           this.results = res;
-          console.log(this.results);
+          if(res) {
+            this.dataSource = new MatTableDataSource(res); 
+            this.dataSource.paginator = this.paginator;
+          }
       },
       error: () => {
         //this.store.dispatch(esimActions.setLoading({ loading: false }));

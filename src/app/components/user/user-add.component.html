@@ -77,8 +77,14 @@
                                     Email
                                 </th>
                                 <th>
-                                    
+                                    Disabled
+                              </th>
+                                <th>
+                                    Delete
                                 </th>
+                                <th>
+                                   Enable
+                              </th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of results">
@@ -89,12 +95,22 @@
                                         {{item.email}}
                                     </td>
                                     <td>
-                                        <button mat-icon-button (click)="DeleteUser(item.id)">
+                                      {{item.lockoutEnabled}}
+                                    </td>
+                                    <td>
+                                        <button mat-icon-button (click)="DeleteUser(item.id)" [disabled]="item.lockoutEnabled">
                                             <mat-icon>delete</mat-icon>
                                       </button>
                                         <!-- <mat-icon  (click)="DeleteUser(item.id)">delete</mat-icon> -->
                                         <!-- <button mat-raised-button type="submit"  class="btn btn-info  pull-right  button"  >Delete</button> -->
                                     </td>
+                                    <td>
+                                      <button mat-icon-button (click)="EnableUser(item.id)" [disabled]="!item.lockoutEnabled">
+                                          <mat-icon>add</mat-icon>
+                                    </button>
+                                      <!-- <mat-icon  (click)="DeleteUser(item.id)">delete</mat-icon> -->
+                                      <!-- <button mat-raised-button type="submit"  class="btn btn-info  pull-right  button"  >Delete</button> -->
+                                  </td>
                                 </tr>
                             </tbody>
                         </table>

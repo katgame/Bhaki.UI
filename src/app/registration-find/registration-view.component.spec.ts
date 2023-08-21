@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
-import { FindRegistrationComponent } from './registration-find.component';
+import { ViewRegistrationComponent } from './registration-view.component';
 
-describe('FindRegistrationComponent', () => {
-  let component: FindRegistrationComponent;
-  let fixture: ComponentFixture<FindRegistrationComponent>;
+describe('ViewRegistrationComponent', () => {
+  let component: ViewRegistrationComponent;
+  let fixture: ComponentFixture<ViewRegistrationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FindRegistrationComponent ]
+      declarations: [ ViewRegistrationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FindRegistrationComponent);
+    fixture = TestBed.createComponent(ViewRegistrationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
