@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/c1de04d7-2227-4999-aa90-82ab10e971ca/resourceGroups/Bhaki/providers/Microsoft.Web/sites/bhakiui",
-    "appService.deploySubpath": "dist"
-}
