@@ -7,6 +7,7 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { HostService } from 'app/service/bhaki-service';
 import { NotificationService } from './../service/notificationService';
 import { Router } from '@angular/router';
+import { SpinnerOverlayService } from './../components/spinner/spinner-overlay.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +24,8 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
   
   dataSource :MatTableDataSource<any>;
-  constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService) { 
+  constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService,private spinner: SpinnerOverlayService) { 
+  //  this.spinner.show('');
     this.getBranches();
     this.getDashboard();
     this.getAllRegistration();
@@ -40,10 +42,6 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
             this.dataSource = new MatTableDataSource(res); 
             this.dataSource.paginator = this.paginator;
           }
-      
-        //  this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
-         // this.dataSource.paginator = this.paginator;
-          console.log(this.results);
       },
       error: () => {
           //this.notify.showNotification()

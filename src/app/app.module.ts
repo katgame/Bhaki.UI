@@ -2,9 +2,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import {
-  AgmCoreModule
-} from '@agm/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { AuthInterceptor } from './components/login/services/auth.intercepter';
@@ -14,11 +11,8 @@ import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HostService } from './service/bhaki-service';
-import { IconsComponent } from './icons/icons.component';
-import { MapsComponent } from './maps/maps.component';
 import { NgModule } from '@angular/core';
 import { NotificationService } from './service/notificationService';
-import { NotificationsComponent } from './notifications/notifications.component';
 import { RouterModule } from '@angular/router';
 import { SpinnerOverlayService } from './components/spinner/spinner-overlay.service';
 import { TokenStorageService } from './components/login/services/token-storage.service';
@@ -33,10 +27,7 @@ import { TokenStorageService } from './components/login/services/token-storage.s
     ComponentsModule,
     RouterModule,
     ReactiveFormsModule ,
-    AppRoutingModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
-    })
+    AppRoutingModule
   ],
   declarations: [
     AppComponent,

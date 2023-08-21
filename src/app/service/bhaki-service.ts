@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Host } from './models/host';
 import { Injectable } from '@angular/core';
 import { Service } from './models/service';
-import { Tenant } from './models/tenant';
 import { environment } from 'environments/environment';
 
 const httpOptions = {
