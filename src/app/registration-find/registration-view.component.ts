@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HostService } from 'app/service/bhaki-service';
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-registration-find',
