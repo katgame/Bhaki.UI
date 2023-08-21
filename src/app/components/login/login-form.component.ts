@@ -6,6 +6,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { HostService } from 'app/service/bhaki-service';
+import { SpinnerOverlayService } from './../spinner/spinner-overlay.service';
 import { TokenStorageService } from './services/token-storage.service';
 
 const form = new FormGroup({
@@ -39,7 +40,9 @@ export class LoginFormComponent {
     public loginForm = form;
     login ='';
     password='';
+
   ngOnInit(){
+  
     //checking if the token is already set i.e user already logged in 
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;

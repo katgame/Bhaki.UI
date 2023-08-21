@@ -4,6 +4,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
+import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
 import { NotificationService } from './../service/notificationService';
 import { Router } from '@angular/router';
@@ -22,10 +23,11 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   Dashboard: any = [];
   results : any;
   displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
-  
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   dataSource :MatTableDataSource<any>;
   constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService,private spinner: SpinnerOverlayService) { 
-  //  this.spinner.show('');
+    this.spinner.show('');
     this.getBranches();
     this.getDashboard();
     this.getAllRegistration();
@@ -35,15 +37,20 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
    this.dataSource.paginator = this.paginator;
   }
   getAllRegistration() {
+   
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
           this.results = res;
           if(res) {
+            this.spinner.hide();
+            this.hideSpinner = true;
             this.dataSource = new MatTableDataSource(res); 
             this.dataSource.paginator = this.paginator;
           }
       },
       error: () => {
+        this.spinner.hide();
+      
           //this.notify.showNotification()
       },
     }
@@ -59,28 +66,34 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
   }
   getBranches() {
+   // this.spinner.show('');
     this.bhakiService.getBranchesForDashBoard().subscribe({
       next: (res) => {
           this.Branch = res;
-          console.log(res);
+          this.spinner.hide();
+       
       },
       error: (err) => {
-      console.log(err);
+        this.spinner.hide();
+      
       },
     }
     );
   }
 
   getDashboard() {
+   // this.spinner.show('');
     this.bhakiService.getDashBoard().subscribe({
       next: (res) => {
           this.Dashboard = res;
           this.setLastWeekStats(res.lastWeekStats);
           this.seCureentWeekStats(res.currentWeekStats);
-          console.log(res);
+          this.spinner.hide();
+        
       },
       error: (err) => {
-      console.log(err);
+        this.spinner.hide();
+        
       },
     }
     );
@@ -192,7 +205,11 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
 }
   ngOnInit() {
-    
+    this.showSpinner.subscribe((res) => {
+
+      this.hideSpinner = res;
+}
+);
       /* ----------==========     Monthly registrations Chart initialization    ==========---------- */
 
       var dataMonthlyRegistrationChart = {
