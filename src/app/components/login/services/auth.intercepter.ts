@@ -37,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
                   this.notification.showNotification('bottom','center', 'You are not allowed to access this information' , 'danger');
                   break;
                 default:
-                 
+                  this.notification.showNotification('bottom','center', 'Service could not be reached. Please contact your Admin' , 'danger');
                   break;
               }
               return throwError(() => new Error('The Error'));

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router, RouterModule } from '@angular/router';
 
 import { AuthenticationService } from './services/authentication.service';
+import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { HostService } from 'app/service/bhaki-service';
 import { TokenStorageService } from './services/token-storage.service';
@@ -20,7 +21,8 @@ const form = new FormGroup({
 })
 export class LoginFormComponent {
   public submitted = false;
-
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public fields = {
     email: 'email',
     password: 'password',
@@ -43,27 +45,29 @@ export class LoginFormComponent {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
     }
+    this.showSpinner.subscribe((res) => {
+
+      this.hideSpinner = res;
+}
+);
   }
 
-  //logging into the app
+
   onLogin() {
-    //check if the logging in form is filled correctly
+    this.showSpinner.next(true);
+
     if (!this.loginForm.valid) {
       return; 
     }
-    console.log(this.login, )
-    //using the authentication service to authenticate the user
-   // this.authService.login({username: "test@test.com" , password: "@Tester1"}).subscribe(
- 
+
      this.authService.login({username: this.loginForm.value.email , password: this.loginForm.value.password}).subscribe(
       data => {
         if (data == null){
           this.isLoginFailed = true;
-         console.log("Incorrect Username/Password.")
         } else {
-          console.log(data);
+          this.showSpinner.next(false);
+
           this.tokenStorage.saveToken(data.token.token);
-         // this.tokenStorage.saveToken(data.accessToken.token);
           this.tokenStorage.saveUser(data.userDetails);
 
           this.isLoginFailed = false;
@@ -74,8 +78,9 @@ export class LoginFormComponent {
 
       },
       err => {
+        this.showSpinner.next(false);
         this.isLoginFailed = true;
-        console.log("Incorrect Username/Password." + err)
+    
       }
     );
   }
