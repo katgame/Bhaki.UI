@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  bhakiApi: 'https://bhakiapi.azurewebsites.net/'
 };

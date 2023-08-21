@@ -2,7 +2,6 @@ import { AllBranchesComponent } from 'app/components/branches/branches-all/branc
 import { AllRegistrationComponent } from 'app/registration-all/registration-all.component';
 import { BranchesEditComponent } from 'app/components/branches/branches-edit/branches-edit.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
-import { FindBranchComponent } from 'app/components/branches/branch-find/branch-find.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { LoginFormComponent } from 'app/components/login/login-form.component';
 import { ManageCourseComponent } from 'app/components/course/manage-course/manage-course.component';
@@ -64,7 +63,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'reports',      component: ReportsComponent },
     { path: 'view-registration/:id',      component: ViewRegistrationComponent },
     { path: 'all-registrations',      component: AllRegistrationComponent },
-    { path: 'find-branch',      component: FindBranchComponent },
     { path: 'registration',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
