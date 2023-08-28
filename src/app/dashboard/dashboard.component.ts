@@ -8,7 +8,6 @@ import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
 import { NotificationService } from './../service/notificationService';
 import { Router } from '@angular/router';
-import { SpinnerOverlayService } from './../components/spinner/spinner-overlay.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,8 +25,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   dataSource :MatTableDataSource<any>;
-  constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService,private spinner: SpinnerOverlayService) { 
-    this.spinner.show('');
+  constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService) { 
     this.getBranches();
     this.getDashboard();
     this.getAllRegistration();
@@ -37,19 +35,20 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
    this.dataSource.paginator = this.paginator;
   }
   getAllRegistration() {
-   
+    this.showSpinner.next(true);
     this.bhakiService.getAllRegistrations().subscribe({
+      
       next: (res) => {
+        this.showSpinner.next(false);
           this.results = res;
           if(res) {
-            this.spinner.hide();
-            this.hideSpinner = true;
+          
             this.dataSource = new MatTableDataSource(res); 
             this.dataSource.paginator = this.paginator;
           }
       },
       error: () => {
-        this.spinner.hide();
+        this.showSpinner.next(false);
       
           //this.notify.showNotification()
       },
@@ -66,15 +65,15 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
   }
   getBranches() {
-   // this.spinner.show('');
+    this.showSpinner.next(true);
     this.bhakiService.getBranchesForDashBoard().subscribe({
       next: (res) => {
           this.Branch = res;
-          this.spinner.hide();
+          this.showSpinner.next(false);
        
       },
       error: (err) => {
-        this.spinner.hide();
+        this.showSpinner.next(false);
       
       },
     }
@@ -82,17 +81,17 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   }
 
   getDashboard() {
-   // this.spinner.show('');
+    this.showSpinner.next(true);
     this.bhakiService.getDashBoard().subscribe({
       next: (res) => {
           this.Dashboard = res;
           this.setLastWeekStats(res.lastWeekStats);
           this.seCureentWeekStats(res.currentWeekStats);
-          this.spinner.hide();
+          this.showSpinner.next(false);
         
       },
       error: (err) => {
-        this.spinner.hide();
+        this.showSpinner.next(false);
         
       },
     }

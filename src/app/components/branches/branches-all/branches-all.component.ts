@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { HostService } from 'app/service/bhaki-service';
 
@@ -11,16 +12,21 @@ import { HostService } from 'app/service/bhaki-service';
 export class AllBranchesComponent implements OnInit {
   showResults:boolean = false;
   Branch: any = [];
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
+ 
   constructor(private bhakiService: HostService) { 
     this.getBranches();
   }
   getBranches() {
+    this.showSpinner.next(true);
     this.bhakiService.getBranchesForDashBoard().subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
           this.Branch = res;
-          console.log(res);
       },
       error: (err) => {
+        this.showSpinner.next(false);
       console.log(err);
       },
     }
@@ -28,6 +34,9 @@ export class AllBranchesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showSpinner.subscribe((res) => {
+      this.hideSpinner = res;
+    });
   }
   search() {
     console.log('searching')

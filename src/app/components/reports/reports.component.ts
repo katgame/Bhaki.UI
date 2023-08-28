@@ -5,8 +5,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
+import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
 import { Router } from '@angular/router';
+import { SpinnerOverlayService } from '../spinner/spinner-overlay.service';
 import { TokenStorageService } from '../login/services/token-storage.service';
 
 declare var $: any;
@@ -38,6 +40,8 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   dateRangeChecked = false;
   userInfo: any;
   results : any;
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public fields = {
     startDate: 'startDate',
     endDate: 'endDate',
@@ -50,21 +54,26 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     this.userInfo = this.tokenService.getUser();
     this.reportsForm.disable();
     this.enableFilters = false;
-   // this.fileInput.nativeElement.value = null;
    }
    public reportsForm = form;
   ngOnInit() {
+    this.showSpinner.subscribe((res) => {
+      this.hideSpinner = res;
+    });
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
    }
   getBranches() {
+    this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
           this.Branch = res;
+          this.showSpinner.next(false);
       },
       error: (err) => {
       console.log(err);
+      this.showSpinner.next(false);
       },
     }
     );
@@ -103,18 +112,22 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     console.log(value);
   }
   getBranchRegistrations(branchId) {
+    this.showSpinner.next(true);
     this.bhakiService.getAllRegistrationsByBranch(branchId).subscribe({
       next: (res) => {
           this.Branch = res;
+          this.showSpinner.next(false);
       },
       error: (err) => {
         console.log(err);
+        this.showSpinner.next(false);
       },
     }
     );
   } 
 
   Search() {
+    this.showSpinner.next(true);
     this.results = [];
     if(this.enableFilters) { 
       if(this.enableDate) {
@@ -124,6 +137,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
         } else {
           this.bhakiService.getBranchRegistrationsByRangeAndBranch( this.reportsForm.value.startDate, this.reportsForm.value.endDate,  this.selectedBranch.id).subscribe({
             next: (res) => {
+              this.showSpinner.next(false);
               this.results = res;
               if(res) {
                 this.dataSource = new MatTableDataSource(res); 
@@ -131,6 +145,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
               }
             },
             error: (err) => {
+              this.showSpinner.next(false);
               console.log(err);
             },
           }
@@ -140,6 +155,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
         if(this.reportsForm.controls['branch'].valid) {
           this.bhakiService.getAllRegistrationsByBranch(this.selectedBranch.id).subscribe({
             next: (res) => {
+              this.showSpinner.next(false);
               this.results = res;
               if(res) {
                 this.dataSource = new MatTableDataSource(res); 
@@ -147,6 +163,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
               }
             },
             error: (err) => {
+              this.showSpinner.next(false);
               console.log(err);
             },
           }
@@ -165,6 +182,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   getAllRegistration() {
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
           this.results = res;
           if(res) {
             this.dataSource = new MatTableDataSource(res); 
@@ -172,6 +190,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
           }
       },
       error: () => {
+        this.showSpinner.next(false);
         //this.store.dispatch(esimActions.setLoading({ loading: false }));
        // this.router.navigate(['activate-fallout']);
       },

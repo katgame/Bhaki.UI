@@ -101,7 +101,7 @@ export class UserProfileComponent implements OnInit {
     this.getBranches();
     this.disableEditFields(false);
     this.userInfo = this.tokenService.getUser();
-    this.showSpinner.next(false);
+
 
     this.loading = true;
   }
@@ -119,7 +119,7 @@ export class UserProfileComponent implements OnInit {
     console.log(data);
   }
   createRegistration() {
-    this.showSpinner.next(true);
+
     try {
       if (!this.registrationForm.valid) {
         this.showNotification(
@@ -155,7 +155,7 @@ export class UserProfileComponent implements OnInit {
           postalCode: this.registrationForm.value.postalCode,
         },
       };
-
+      this.showSpinner.next(true);
       this.bhakiService.createRegitration(request).subscribe({
         next: (res) => {
           this.showSpinner.next(false);
@@ -184,11 +184,13 @@ export class UserProfileComponent implements OnInit {
   }
 
   getBranches() {
+    this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
         this.Branch = res;
       },
-      error: () => {},
+      error: () => {  this.showSpinner.next(false);},
     });
   }
 
@@ -202,7 +204,6 @@ export class UserProfileComponent implements OnInit {
 
       this.registrationForm.controls["course"].disable();
       this.registrationForm.controls["amountPaid"].disable();
-      //  this.registrationForm.controls['outstandingAmount'].disable();
       this.registrationForm.controls["streetAddress"].disable();
       this.registrationForm.controls["city"].disable();
 
@@ -219,7 +220,6 @@ export class UserProfileComponent implements OnInit {
 
       this.registrationForm.controls["course"].enable();
       this.registrationForm.controls["amountPaid"].enable();
-      //this.registrationForm.controls['outstandingAmount'].enable();
       this.registrationForm.controls["streetAddress"].enable();
       this.registrationForm.controls["city"].enable();
 
@@ -230,11 +230,24 @@ export class UserProfileComponent implements OnInit {
     }
   }
   getOustandingAmount() {
+   
     const amountPaid = this.registrationForm.value.amountPaid;
     const coursePrice = this.Course.filter(
       (x) => x.name === this.registrationForm.value.course
     )[0].price;
-    this.outstandingAmount = Number(coursePrice) - Number(amountPaid);
+    if(this.registrationForm.value.amountPaid > coursePrice) {
+      this.registrationForm.controls["amountPaid"].setValue('');
+      this.outstandingAmount = 0;
+      this.notify.showNotification(
+        "bottom",
+        "center",
+        "Amount Paid can not be greater than the course price",
+        "danger"
+      );
+    } else {
+      this.outstandingAmount = Number(coursePrice) - Number(amountPaid);
+    }
+   
   }
   textValidation(event: any): boolean {
     const charCode = event.keyCode;
@@ -245,8 +258,10 @@ export class UserProfileComponent implements OnInit {
     );
   }
   getCourses(branchId) {
+    this.showSpinner.next(true);
     this.bhakiService.getCourses(branchId).subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
         if (res.length > 0) {
           this.Course = res;
           this.disableEditFields(true);
@@ -260,6 +275,7 @@ export class UserProfileComponent implements OnInit {
         }
       },
       error: () => {
+        this.showSpinner.next(false);
         this.notify.showNotification(
           "bottom",
           "center",

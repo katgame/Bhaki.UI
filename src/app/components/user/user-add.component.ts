@@ -1,5 +1,6 @@
 import * as uuid from 'uuid';
 
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -42,48 +43,64 @@ export class UserAddComponent implements OnInit {
     branch : 'branch'
 
   };
+  private subscription: Subscription;  
+  hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor(private bhakiService: HostService, private spinner:SpinnerOverlayService, private tokenService: TokenStorageService) {
+
     this.getBranches();
     this.getAllUsers();
     this.getRoles();
     this.userInfo = this.tokenService.getUser();
-
-   // this.fileInput.nativeElement.value = null;
    }
    public userForm = form;
   ngOnInit() {
+    this.showSpinner.subscribe((res) => {
+      this.hideSpinner = res;
+    });
   }
   
+  
   getBranches() {
+    this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
           this.Branch = res;
+          this.showSpinner.next(false);
       },
       error: (err) => {
       console.log(err);
+      this.showSpinner.next(false);
       },
     }
     );
   }
 
   getRoles() {
+    this.showSpinner.next(true);
     this.bhakiService.getUserRoles().subscribe({
       next: (res) => {
           this.Role = res;
+          this.showSpinner.next(false);
       },
       error: (err) => {
       console.log(err);
+      this.showSpinner.next(false);
       },
     }
     );
   }
 
  getAllUsers() {
+  this.showSpinner.next(true);
   this.bhakiService.getAllUsers().subscribe({
     next: (res) => {
+      this.showSpinner.next(false);
       this.results = res;
     },
     error: (err) => {
+      this.showSpinner.next(false);
       console.log(err);
     },
   }
@@ -103,44 +120,50 @@ export class UserAddComponent implements OnInit {
     "role": this.selectedRole.name,
     "branchId": this.selectedBranch.id
     }
+    this.showSpinner.next(true);
       this.bhakiService.registerUser(user).subscribe({
             next: (res) => {
+              this.showSpinner.next(false);
               this.showNotification('bottom','center', 'User succesfully added' , 'success');
               this.getAllUsers();
-            }  
+            } ,
+            error: (err) => {
+              this.showSpinner.next(false);
+              console.log(err);
+            }, 
           }
           );
       
   }
 
   DeleteUser(user: any) {
-    this.spinner.show('please wait');
+    this.showSpinner.next(true);
     this.bhakiService.deleteUser(user).subscribe({
       next: (res) => {
         this.getAllUsers();
         this.showNotification('bottom','center', 'User succesfully deleted' , 'success');
-        this.spinner.hide();
+        this.showSpinner.next(false);
       },
       error: (err) => {
         console.log(err);
         this.showNotification('bottom','center', 'User could not be deleted' , 'danger');
-        this.spinner.hide();
+        this.showSpinner.next(false);
       },
     }
     );
   }
   EnableUser(user: any) {
-    this.spinner.show('please wait');
+    this.showSpinner.next(true);
     this.bhakiService.enableUser(user).subscribe({
       next: (res) => {
         this.getAllUsers();
         this.showNotification('bottom','center', 'User succesfully enabled' , 'success');
-        this.spinner.hide();
+        this.showSpinner.next(false);
       },
       error: (err) => {
         console.log(err);
         this.showNotification('bottom','center', 'User could not be enabled' , 'danger');
-        this.spinner.hide();
+        this.showSpinner.next(false);
       },
     }
     );

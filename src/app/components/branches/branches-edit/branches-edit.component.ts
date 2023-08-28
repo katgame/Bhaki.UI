@@ -3,6 +3,7 @@ import * as Chartist from 'chartist';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
 import { NotificationService } from 'app/service/notificationService';
 
@@ -23,6 +24,9 @@ export class BranchesEditComponent implements OnInit {
   price = '';
 Branch: any = [];
 selectedBranch : any;
+hideSpinner = true;
+  public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  
 public fields = {
   name: 'name',
   description: 'description'
@@ -33,12 +37,15 @@ public fields = {
   }
   public branchForm = form;
   getBranches() {
+    this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
           this.Branch = res;
         
       },
       error: (err) => {
+        this.showSpinner.next(false);
       console.log(err);
       },
     }
@@ -51,20 +58,25 @@ public fields = {
       description:  this.branchForm.value.description,
       price : 0
      }
+     this.showSpinner.next(true);
      this.bhakiService.addBranch( branch).subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
         this.notify.showNotification('bottom','center', 'Branch has been successfully added' , 'success');
         window.location.reload();
         
       },
       error: (err) => {
+        this.showSpinner.next(false);
       console.log(err);
       },
     }
     );
   }
   ngOnInit() {
-   
+    this.showSpinner.subscribe((res) => {
+      this.hideSpinner = res;
+    });
   }
 
   validateBranchSelection(branch: any) {
@@ -92,14 +104,16 @@ public fields = {
       } else {
         this.selectedBranch.description = this.description;
       }
-
+      this.showSpinner.next(true);
       this.bhakiService.updateBranch( this.selectedBranch).subscribe({
         next: (res) => {
+          this.showSpinner.next(false);
           this.notify.showNotification('bottom','center', 'Branch has been successfully updated' , 'success');
           window.location.reload();
           
         },
         error: (err) => {
+          this.showSpinner.next(false);
         console.log(err);
         },
       }
