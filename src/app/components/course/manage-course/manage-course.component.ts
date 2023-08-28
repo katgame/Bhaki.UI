@@ -71,8 +71,10 @@ export class ManageCourseComponent implements OnInit {
   selectedBranch: any;
   Branch: any = [];
   getCourse(branchId) {
+    this.showSpinner.next(true);
     this.bhakiService.getCourses(branchId).subscribe({
       next: (res) => {
+        this.showSpinner.next(false);
         if (res.length > 0) {
           this.Course = res;
           this.disableCourseField(true);
@@ -87,7 +89,7 @@ export class ManageCourseComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.log(err);
+        this.showSpinner.next(false);
       },
     });
   }

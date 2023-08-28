@@ -1,37 +1,40 @@
-import * as uuid from 'uuid';
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-
-import { BehaviorSubject } from 'rxjs';
-import { HostService } from 'app/service/bhaki-service';
-import { Router } from '@angular/router';
-import { SpinnerOverlayService } from '../spinner/spinner-overlay.service';
-import { TokenStorageService } from '../login/services/token-storage.service';
-
-declare var $: any;
-
+import { BehaviorSubject } from "rxjs";
+import { HostService } from "app/service/bhaki-service";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
 
 const form = new FormGroup({
-  startDate: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  endDate: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  branch: new FormControl({ value: '', disabled: false }, [Validators.required]),
-  dateRange: new FormControl({ value: '', disabled: false }),
-
+  startDate: new FormControl({ value: "", disabled: false }, [
+    Validators.required,
+  ]),
+  endDate: new FormControl({ value: "", disabled: false }, [
+    Validators.required,
+  ]),
+  branch: new FormControl({ value: "", disabled: false }, [
+    Validators.required,
+  ]),
+  dateRange: new FormControl({ value: "", disabled: false }),
 });
 
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  selector: "app-reports",
+  templateUrl: "./reports.component.html",
+  styleUrls: ["./reports.component.css"],
 })
 export class ReportsComponent implements OnInit, AfterViewInit {
-  @ViewChild('paginator') paginator: MatPaginator;
-  dataSource :MatTableDataSource<any>;
-  displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
-  
+  @ViewChild("paginator") paginator: MatPaginator;
+  displayedColumns: string[] = [
+    "registrationNo",
+    "studentName",
+    "registrationDate",
+    "registeredBy",
+    "courseName",
+    "branchName",
+  ];
 
   Branch: any = [];
   selectedBranch: any;
@@ -39,201 +42,169 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   enableDate = false;
   dateRangeChecked = false;
   userInfo: any;
-  results : any;
+  results: any;
+  allBaranchChecked = true;
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public fields = {
-    startDate: 'startDate',
-    endDate: 'endDate',
-    branch: 'branch',
-    dateRange : 'dateRange'
-
+    startDate: "startDate",
+    endDate: "endDate",
+    branch: "branch",
+    dateRange: "dateRange",
   };
-  constructor(private bhakiService: HostService, private tokenService: TokenStorageService,private router: Router) {
+  dataSource: MatTableDataSource<any>;
+
+  constructor(private bhakiService: HostService, private router: Router) {
     this.getBranches();
-    this.userInfo = this.tokenService.getUser();
     this.reportsForm.disable();
     this.enableFilters = false;
-   }
-   public reportsForm = form;
+    this.dataSource = new MatTableDataSource();
+  }
+  public reportsForm = form;
   ngOnInit() {
     this.showSpinner.subscribe((res) => {
       this.hideSpinner = res;
     });
+  //  this.getAllRegistration();
   }
-  ngAfterViewInit() {
-
-   }
+  ngAfterViewInit() {}
   getBranches() {
     this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
       next: (res) => {
-          this.Branch = res;
-          this.showSpinner.next(false);
-      },
-      error: (err) => {
-      console.log(err);
-      this.showSpinner.next(false);
-      },
-    }
-    );
-  }
-  selection(id: any) {
-    this.router.navigate(['view-registration', id.registrationNumber]);
-  }
-  enableDateRange(enable: boolean) {
-    if(!enable) {
-        this.reportsForm.controls['startDate'].disable();
-        this.reportsForm.controls['endDate'].disable();
-        this.enableDate = false;
-      }
-    else {
-      this.reportsForm.controls['startDate'].enable();
-      this.reportsForm.controls['endDate'].enable();
-      this.enableDate = true;
-    }
-  }
-  dateRangeChange(value : any) {
-    this.enableDateRange(value);
-  }
-
-  filterChange(value : any) {
-    if(value) {
-      this.enableFilters = false;
-      this.reportsForm.disable();
-      this.dateRangeChecked = true;
-    }
-  else {
-    this.enableFilters = true;
-    this.reportsForm.enable();
-    this.enableDateRange(false);
-    this.dateRangeChecked = false;
-  }
-    console.log(value);
-  }
-  getBranchRegistrations(branchId) {
-    this.showSpinner.next(true);
-    this.bhakiService.getAllRegistrationsByBranch(branchId).subscribe({
-      next: (res) => {
-        
-          this.Branch = res;
-          this.showSpinner.next(false);
+        this.Branch = res;
+        this.showSpinner.next(false);
       },
       error: (err) => {
         console.log(err);
         this.showSpinner.next(false);
       },
+    });
+  }
+  selection(id: any) {
+    this.router.navigate(["view-registration", id.registrationNumber]);
+  }
+  enableDateRange(enable: boolean) {
+    if (!enable) {
+      this.reportsForm.controls["startDate"].disable();
+      this.reportsForm.controls["endDate"].disable();
+      this.enableDate = false;
+    } else {
+      this.reportsForm.controls["startDate"].enable();
+      this.reportsForm.controls["endDate"].enable();
+      this.enableDate = true;
     }
-    );
-  } 
+  }
+  dateRangeChange(value: any) {
+    this.enableDateRange(value);
+  }
+
+  filterChange(value: any) {
+    if (value) {
+      this.enableFilters = false;
+      this.reportsForm.disable();
+      this.dateRangeChecked = true;
+    } else {
+      this.enableFilters = true;
+      this.reportsForm.enable();
+      this.enableDateRange(false);
+      this.dateRangeChecked = false;
+    }
+  }
+  getBranchRegistrations(branchId) {
+    this.showSpinner.next(true);
+    this.bhakiService.getAllRegistrationsByBranch(branchId).subscribe({
+      next: (res) => {
+        this.Branch = res;
+        this.showSpinner.next(false);
+      },
+      error: (err) => {
+        console.log(err);
+        this.showSpinner.next(false);
+      },
+    });
+  }
 
   Search() {
-    this.showSpinner.next(true);
-    this.results = [];
-    if(this.enableFilters) { 
-      if(this.enableDate) {
-        if(!this.reportsForm.valid)
-        {
+
+    if (this.enableFilters) {
+      this.allBaranchChecked = false;
+      if (this.enableDate) {
+        if (!this.reportsForm.valid) {
           return;
         } else {
-          this.bhakiService.getBranchRegistrationsByRangeAndBranch( this.reportsForm.value.startDate, this.reportsForm.value.endDate,  this.selectedBranch.id).subscribe({
-            next: (res) => {
-              this.showSpinner.next(false);
-            
-              if(res) {
-                this.results = res;
-                this.dataSource = new MatTableDataSource(res); 
-                this.dataSource.paginator = this.paginator;
-              }
-            },
-            error: (err) => {
-              this.showSpinner.next(false);
-              console.log(err);
-            },
-          }
-          );
+          this.bhakiService
+            .getBranchRegistrationsByRangeAndBranch(
+              this.reportsForm.value.startDate,
+              this.reportsForm.value.endDate,
+              this.selectedBranch.id
+            )
+            .subscribe({
+              next: (res) => {
+                this.showSpinner.next(false);
+
+                if (res) {
+                  this.results = res;
+                  this.dataSource.data = res;
+                  this.dataSource.paginator = this.paginator;
+                }
+              },
+              error: (err) => {
+                this.showSpinner.next(false);
+                console.log(err);
+              },
+            });
         }
       } else {
-        if(this.reportsForm.controls['branch'].valid) {
-          this.bhakiService.getAllRegistrationsByBranch(this.selectedBranch.id).subscribe({
-            next: (res) => {
-              this.showSpinner.next(false);
-             
-              if(res) {
-                this.results = res;
-                this.dataSource = new MatTableDataSource(res); 
-                this.dataSource.paginator = this.paginator;
-              }
-            },
-            error: (err) => {
-              this.showSpinner.next(false);
-              console.log(err);
-            },
-          }
-          );
+        if (this.reportsForm.controls["branch"].valid) {
+          this.bhakiService
+            .getAllRegistrationsByBranch(this.selectedBranch.id)
+            .subscribe({
+              next: (res) => {
+                this.showSpinner.next(false);
+
+                if (res) {
+                  this.results = res;
+                  this.dataSource.data = res;
+                  this.dataSource.paginator = this.paginator;
+                }
+              },
+              error: (err) => {
+                this.showSpinner.next(false);
+                console.log(err);
+              },
+            });
         } else {
           return;
         }
       }
-    }else {
+    } else {
+      this.allBaranchChecked = true;
       this.getAllRegistration();
     }
-  
-   
   }
 
   getAllRegistration() {
+    this.showSpinner.next(true);
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
-        this.showSpinner.next(false);
-        
-          if(res) {
-            this.results = res;
-            this.dataSource = new MatTableDataSource(res); 
-            this.dataSource.paginator = this.paginator;
-          }
+       this.showSpinner.next(false);
+
+        if (res) {
+          this.results = res;
+          this.dataSource.data = res;
+          this.dataSource.paginator = this.paginator;
+        }
       },
-      error: () => {
+      error: (err) => {
         this.showSpinner.next(false);
-        //this.store.dispatch(esimActions.setLoading({ loading: false }));
-       // this.router.navigate(['activate-fallout']);
+        console.log(err);
+        //this.notify.showNotification()
       },
-    }
-    );
+    });
   }
 
   validateBranchSelection(branch: any) {
-
     this.selectedBranch = branch;
-
   }
- 
-  showNotification(from, align, message, colorType){
-    const type = ['','info','success','warning','danger'];
-
-    const color = Math.floor((Math.random() * 4) + 1);
-
-    $.notify({
-        icon: "notifications",
-        message: message
-
-    },{
-        type: colorType,
-        timer: 4000,
-        placement: {
-            from: from,
-            align: align
-        },
-        template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
-          '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +
-          '<i class="material-icons" data-notify="icon">notifications</i> ' +
-          '<span data-notify="title">{1}</span> ' +
-          '<span data-notify="message">{2}</span>' +
-          '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-          '</div>' +
-          '<a href="{3}" target="{4}" data-notify="url"></a>' +
-        '</div>'
-    });
-}
 }

@@ -1,14 +1,13 @@
 import * as Chartist from 'chartist';
 
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 
 import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 import { NotificationService } from './../service/notificationService';
 import { Router } from '@angular/router';
-import { TokenStorageService } from 'app/components/login/services/token-storage.service';
 
 @Component({
   selector: 'app-dashboard',
