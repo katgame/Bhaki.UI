@@ -126,13 +126,14 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   }
 
   Search() {
-
+    this.showSpinner.next(true);
     if (this.enableFilters) {
       this.allBaranchChecked = false;
       if (this.enableDate) {
         if (!this.reportsForm.valid) {
           return;
         } else {
+          
           this.bhakiService
             .getBranchRegistrationsByRangeAndBranch(
               this.reportsForm.value.startDate,
@@ -185,7 +186,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
   }
 
   getAllRegistration() {
-    this.showSpinner.next(true);
+   // this.showSpinner.next(true);
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
        this.showSpinner.next(false);
