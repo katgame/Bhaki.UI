@@ -89,8 +89,13 @@ export class LoginFormComponent {
 
             this.isLoginFailed = false;
             this.isLoggedIn = true;
-            this.roles = this.tokenStorage.getUser().roles;
-            this.router.navigate(["/dashboard"]);
+            this.roles = data.userDetails.role;
+            if(this.roles.includes('Admin') === true) { 
+              this.router.navigate(["dashboard"]);
+            } else {
+              this.router.navigate(["registration"]);
+            }
+           
           }
         },
         (err) => {

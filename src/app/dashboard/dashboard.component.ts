@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HostService } from 'app/service/bhaki-service';
 import { NotificationService } from './../service/notificationService';
 import { Router } from '@angular/router';
+import { TokenStorageService } from 'app/components/login/services/token-storage.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +17,6 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit, AfterViewInit  {
   @ViewChild('paginator') paginator: MatPaginator;
-  @ViewChild('paginatorPageSize') paginatorPageSize: MatPaginator;
 
   Branch: any = [];
   Dashboard: any = [];
@@ -24,15 +24,19 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   displayedColumns: string[] = ['registrationNo', 'studentName', 'registrationDate', 'registeredBy', 'courseName', 'branchName'];
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private userInfo: any;
   dataSource :MatTableDataSource<any>;
   constructor(private bhakiService: HostService,private router: Router, private notify: NotificationService) { 
-    this.getBranches();
-    this.getDashboard();
-    this.getAllRegistration();
+
+      this.getBranches();
+      this.getDashboard();
+      this.getAllRegistration();
+    
+ 
   }
 
   ngAfterViewInit() {
-   this.dataSource.paginator = this.paginator;
+   //this.dataSource.paginator = this.paginator;
   }
   getAllRegistration() {
     this.showSpinner.next(true);
@@ -40,9 +44,9 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       
       next: (res) => {
         this.showSpinner.next(false);
-          this.results = res;
+      
           if(res) {
-          
+            this.results = res;
             this.dataSource = new MatTableDataSource(res); 
             this.dataSource.paginator = this.paginator;
           }
@@ -209,37 +213,37 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       this.hideSpinner = res;
 }
 );
-      /* ----------==========     Monthly registrations Chart initialization    ==========---------- */
+      // /* ----------==========     Monthly registrations Chart initialization    ==========---------- */
 
-      var dataMonthlyRegistrationChart = {
-        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-        series: [
-          [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+      // var dataMonthlyRegistrationChart = {
+      //   labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+      //   series: [
+      //     [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
 
-        ]
-      };
-      var optionsMonthlyRegistrationChart = {
-          axisX: {
-              showGrid: false
-          },
-          low: 0,
-          high: 1000,
-          chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
-      };
-      var responsiveOptions: any[] = [
-        ['screen and (max-width: 640px)', {
-          seriesBarDistance: 5,
-          axisX: {
-            labelInterpolationFnc: function (value) {
-              return value[0];
-            }
-          }
-        }]
-      ];
-      var MonthlyRegistrationChart = new Chartist.Bar('#MonthlyRegistrationChart', dataMonthlyRegistrationChart, optionsMonthlyRegistrationChart, responsiveOptions);
+      //   ]
+      // };
+      // var optionsMonthlyRegistrationChart = {
+      //     axisX: {
+      //         showGrid: false
+      //     },
+      //     low: 0,
+      //     high: 1000,
+      //     chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
+      // };
+      // var responsiveOptions: any[] = [
+      //   ['screen and (max-width: 640px)', {
+      //     seriesBarDistance: 5,
+      //     axisX: {
+      //       labelInterpolationFnc: function (value) {
+      //         return value[0];
+      //       }
+      //     }
+      //   }]
+      // ];
+      // var MonthlyRegistrationChart = new Chartist.Bar('#MonthlyRegistrationChart', dataMonthlyRegistrationChart, optionsMonthlyRegistrationChart, responsiveOptions);
 
-      //start animation for the Emails Subscription Chart
-      this.startAnimationForBarChart(MonthlyRegistrationChart);
+      // //start animation for the Emails Subscription Chart
+      // this.startAnimationForBarChart(MonthlyRegistrationChart);
   }
 
 }

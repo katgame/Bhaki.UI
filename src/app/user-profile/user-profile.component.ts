@@ -53,9 +53,7 @@ const form = new FormGroup({
     Validators.required,
   ]),
   idDocument: new FormControl({ value: "", disabled: false }),
-  branch: new FormControl({ value: "", disabled: false }, [
-    Validators.required,
-  ]),
+
 });
 
 @Component({
@@ -88,7 +86,6 @@ export class UserProfileComponent implements OnInit {
     firstName: "firstName",
     course: "course",
     idDocument: "idDocument",
-    branch: "branch",
   };
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -98,11 +95,10 @@ export class UserProfileComponent implements OnInit {
     private tokenService: TokenStorageService,
     private spinner: SpinnerOverlayService
   ) {
-    this.getBranches();
+   
     this.disableEditFields(false);
     this.userInfo = this.tokenService.getUser();
-
-
+    this.getCourses(this.userInfo.branchId);
     this.loading = true;
   }
   public registrationForm = form;
@@ -134,7 +130,7 @@ export class UserProfileComponent implements OnInit {
         (x) => x.name === this.registrationForm.value.course
       )[0].id;
       const request = {
-        branchId: this.selectedBranch.id,
+        branchId: this.userInfo.branchId,
         courseId: courseId,
         name: this.registrationForm.value.firstName,
         surname: this.registrationForm.value.lastName,
@@ -183,16 +179,6 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  getBranches() {
-    this.showSpinner.next(true);
-    this.bhakiService.getBranches().subscribe({
-      next: (res) => {
-        this.showSpinner.next(false);
-        this.Branch = res;
-      },
-      error: () => {  this.showSpinner.next(false);},
-    });
-  }
 
   disableEditFields(enable: boolean) {
     if (!enable) {
@@ -269,8 +255,8 @@ export class UserProfileComponent implements OnInit {
           this.notify.showNotification(
             "bottom",
             "center",
-            "No Course available for this branch",
-            "warning"
+            "No courses available, Please contact your admin to load courses for your branch",
+            "danger"
           );
         }
       },
@@ -286,20 +272,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  validateBranchSelection(branch: any) {
-    if (this.registrationForm.get("branch")?.value) {
-      this.selectedBranch = branch;
-      if (branch.id !== this.userInfo.branchId) {
-        this.showNotification(
-          "bottom",
-          "center",
-          "Please note: The branch selected is not the branch you are registered to.",
-          "warning"
-        );
-      }
-    }
-    this.getCourses(this.selectedBranch.id);
-  }
   _handleReaderLoaded(readerEvt) {
     var binaryString = readerEvt.target.result;
     this.base64textString = btoa(binaryString);

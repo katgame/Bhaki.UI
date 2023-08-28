@@ -49,54 +49,55 @@
               
                 </div>
                 <div class="card-body">
-                    <div class="mat-elevation-z8">
-                        <table mat-table [dataSource]="dataSource"  >
+                  <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource">
 
-                            <!-- Position Column -->
-                            <ng-container matColumnDef="registrationNo">
-                                <th mat-header-cell *matHeaderCellDef> Registration No. </th>
-                                <td mat-cell   *matCellDef="let element"> {{element.registrationNumber}} </td>
-                            </ng-container>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="registrationNo">
+                            <th mat-header-cell *matHeaderCellDef> Registration No. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.registrationNumber}} </td>
+                        </ng-container>
 
-                            <!-- Name Column -->
-                            <ng-container matColumnDef="studentName">
-                                <th mat-header-cell *matHeaderCellDef> Name </th>
-                                <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
-                            </ng-container>
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="studentName">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+                        </ng-container>
 
-                            <!-- Weight Column -->
-                            <ng-container matColumnDef="registrationDate">
-                                <th mat-header-cell *matHeaderCellDef> Registration Date </th>
-                                <td mat-cell *matCellDef="let element"> {{element.registrationDate | date:
-                                    'dd/MM/yyyy'}} </td>
-                            </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="registrationDate">
+                            <th mat-header-cell *matHeaderCellDef> Registration Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.registrationDate | date:
+                                'dd/MM/yyyy'}} </td>
+                        </ng-container>
 
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="registeredBy">
-                                <th mat-header-cell *matHeaderCellDef> Registered By </th>
-                                <td mat-cell *matCellDef="let element"> {{element.createBy.name}} </td>
-                            </ng-container>
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="registeredBy">
+                            <th mat-header-cell *matHeaderCellDef> Registered By </th>
+                            <td mat-cell *matCellDef="let element"> {{element.createBy.name}} </td>
+                        </ng-container>
 
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="courseName">
-                                <th mat-header-cell *matHeaderCellDef> Course Name </th>
-                                <td mat-cell *matCellDef="let element"> {{element.course}} </td>
-                            </ng-container>
-                            <!-- Symbol Column -->
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="courseName">
+                            <th mat-header-cell *matHeaderCellDef> Course Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.course}} </td>
+                        </ng-container>
+                        <!-- Symbol Column -->
 
-                            <ng-container matColumnDef="branchName">
-                                <th mat-header-cell *matHeaderCellDef> Branch Name </th>
-                                <td mat-cell *matCellDef="let element"> {{element.branch.name}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="branchName">
+                            <th mat-header-cell *matHeaderCellDef> Branch Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.branch.name}} </td>
+                        </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row (click)="selection(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
-                        </table>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row (click)="selection(row)" *matRowDef="let row; columns: displayedColumns;">
+                        </tr>
+                    </table>
 
-                        <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]"  [pageSize]="5" showFirstLastButtons
-                            aria-label="Select page of periodic elements">
-                        </mat-paginator>
-                    </div>
+                    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" [length]="results?.length"
+                        [pageSize]="5" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
                 </div>
             </div>
         </div>

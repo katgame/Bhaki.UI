@@ -1,10 +1,12 @@
 import * as uuid from 'uuid';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { HostService } from 'app/service/bhaki-service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { SpinnerOverlayService } from '../spinner/spinner-overlay.service';
 import { TokenStorageService } from '../login/services/token-storage.service';
 
@@ -26,7 +28,7 @@ const form = new FormGroup({
   templateUrl: './user-add.component.html',
   styleUrls: ['./user-add.component.css']
 })
-export class UserAddComponent implements OnInit {
+export class UserAddComponent implements OnInit, OnDestroy {
 
   Branch: any = [];
   Role: any = [];
@@ -43,8 +45,11 @@ export class UserAddComponent implements OnInit {
     branch : 'branch'
 
   };
-  private subscription: Subscription;  
+  @ViewChild('paginator') paginator: MatPaginator;
+  displayedColumns: string[] = ['userName', 'email', 'branch', 'inactive', 'disable', 'enable'];
+
   hideSpinner = true;
+  dataSource :MatTableDataSource<any>;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private bhakiService: HostService, private spinner:SpinnerOverlayService, private tokenService: TokenStorageService) {
@@ -54,6 +59,9 @@ export class UserAddComponent implements OnInit {
     this.getRoles();
     this.userInfo = this.tokenService.getUser();
    }
+  ngOnDestroy(): void {
+    this.userForm.reset();
+  }
    public userForm = form;
   ngOnInit() {
     this.showSpinner.subscribe((res) => {
@@ -97,7 +105,11 @@ export class UserAddComponent implements OnInit {
   this.bhakiService.getAllUsers().subscribe({
     next: (res) => {
       this.showSpinner.next(false);
-      this.results = res;
+      if(res) {
+        this.results = res;
+        this.dataSource = new MatTableDataSource(res); 
+        this.dataSource.paginator = this.paginator;
+      }
     },
     error: (err) => {
       this.showSpinner.next(false);

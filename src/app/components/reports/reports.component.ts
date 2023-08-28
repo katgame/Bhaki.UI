@@ -62,7 +62,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     });
   }
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+
    }
   getBranches() {
     this.showSpinner.next(true);
@@ -115,6 +115,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     this.showSpinner.next(true);
     this.bhakiService.getAllRegistrationsByBranch(branchId).subscribe({
       next: (res) => {
+        
           this.Branch = res;
           this.showSpinner.next(false);
       },
@@ -138,8 +139,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
           this.bhakiService.getBranchRegistrationsByRangeAndBranch( this.reportsForm.value.startDate, this.reportsForm.value.endDate,  this.selectedBranch.id).subscribe({
             next: (res) => {
               this.showSpinner.next(false);
-              this.results = res;
+            
               if(res) {
+                this.results = res;
                 this.dataSource = new MatTableDataSource(res); 
                 this.dataSource.paginator = this.paginator;
               }
@@ -156,8 +158,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
           this.bhakiService.getAllRegistrationsByBranch(this.selectedBranch.id).subscribe({
             next: (res) => {
               this.showSpinner.next(false);
-              this.results = res;
+             
               if(res) {
+                this.results = res;
                 this.dataSource = new MatTableDataSource(res); 
                 this.dataSource.paginator = this.paginator;
               }
@@ -183,8 +186,9 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     this.bhakiService.getAllRegistrations().subscribe({
       next: (res) => {
         this.showSpinner.next(false);
-          this.results = res;
+        
           if(res) {
+            this.results = res;
             this.dataSource = new MatTableDataSource(res); 
             this.dataSource.paginator = this.paginator;
           }

@@ -61,6 +61,8 @@ export class ManageCourseComponent implements OnInit {
     private tokenService: TokenStorageService
   ) {
     this.disableEditFields(false);
+    this.disableCourseField(false);
+    
     this.getBranches();
     this.userInfo = this.tokenService.getUser();
   }
@@ -73,12 +75,13 @@ export class ManageCourseComponent implements OnInit {
       next: (res) => {
         if (res.length > 0) {
           this.Course = res;
-          this.disableEditFields(true);
+          this.disableCourseField(true);
         } else {
+          this.disableCourseField(false);
           this.notify.showNotification(
             "bottom",
             "center",
-            "No Course available for this branch",
+            "No Course available for this branch, You can add a new course below",
             "warning"
           );
         }
@@ -97,6 +100,7 @@ export class ManageCourseComponent implements OnInit {
 
   validateBranchSelection(branch: any) {
     this.courseUpdateForm.reset();
+   
     this.disableEditFields(false);
     this.selectedBranch = branch;
     this.getCourse(this.selectedBranch.id);
@@ -158,26 +162,43 @@ export class ManageCourseComponent implements OnInit {
   disableEditFields(enable: boolean) {
     if (!enable) {
       this.courseUpdateForm.controls["name"].disable();
-      this.courseUpdateForm.controls["course"].disable();
+
       this.courseUpdateForm.controls["description"].disable();
       this.courseUpdateForm.controls["courseDuration"].disable();
       this.courseUpdateForm.controls["price"].disable();
     } else {
-      this.courseUpdateForm.controls["course"].enable();
       this.courseUpdateForm.controls["name"].enable();
       this.courseUpdateForm.controls["description"].enable();
       this.courseUpdateForm.controls["courseDuration"].enable();
       this.courseUpdateForm.controls["price"].enable();
     }
   }
+
+  disableCourseField(enable: boolean) {
+    if (!enable) {
+      this.courseUpdateForm.controls["course"].disable();
+
+    } else {
+      this.courseUpdateForm.controls["course"].enable();
+    }
+  }
   validateCourseSelection(course: any) {
+    this.clearValues();
+    this.disableEditFields(true);
+
     this.selectedCourse = course;
     this.name = course.name;
     this.description = course.description;
     this.courseDuration = course.courseDuration;
     this.price = course.price;
   }
+  clearValues() {
 
+    this.name = '';
+    this.description = '';
+    this.courseDuration = '';
+    this.price ='';
+  }
   Update() {
     if (this.name === "" || this.description === "") {
       this.notify.showNotification(

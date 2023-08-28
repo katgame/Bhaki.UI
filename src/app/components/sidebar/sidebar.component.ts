@@ -41,7 +41,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [];
-   console.log(this.userInfo.role);
    if(this.userInfo.role.includes('Admin') === true) {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
    } else {
