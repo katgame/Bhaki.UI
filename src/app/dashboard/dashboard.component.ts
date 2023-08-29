@@ -52,8 +52,6 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       },
       error: () => {
         this.showSpinner.next(false);
-      
-          //this.notify.showNotification()
       },
     }
     );
@@ -87,10 +85,13 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
     this.showSpinner.next(true);
     this.bhakiService.getDashBoard().subscribe({
       next: (res) => {
+        if(res) {
           this.Dashboard = res;
           this.setLastWeekStats(res.lastWeekStats);
           this.seCureentWeekStats(res.currentWeekStats);
           this.showSpinner.next(false);
+        }
+      
         
       },
       error: (err) => {
