@@ -20,6 +20,7 @@ const Updateform = new FormGroup({
   course: new FormControl({ value: "", disabled: false }, [
     Validators.required,
   ]),
+  
 });
 
 const Saveform = new FormGroup({
@@ -40,6 +41,7 @@ const Saveform = new FormGroup({
 export class ManageCourseComponent implements OnInit {
   showResults: boolean = false;
   name = "";
+  
   description = "";
   courseDuration = "";
   price = "";

@@ -30,7 +30,6 @@ const form = new FormGroup({
     Validators.required,
   ]),
   email: new FormControl("", [
-    Validators.required,
     Validators.email,
     Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
   ]),
@@ -53,7 +52,7 @@ const form = new FormGroup({
     Validators.required,
   ]),
   idDocument: new FormControl({ value: "", disabled: false }),
-
+  recieptReference: new FormControl({ value: "", disabled: false }),
 });
 
 @Component({
@@ -86,6 +85,7 @@ export class UserProfileComponent implements OnInit {
     firstName: "firstName",
     course: "course",
     idDocument: "idDocument",
+    recieptReference: "recieptReference",
   };
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -142,6 +142,7 @@ export class UserProfileComponent implements OnInit {
         amountPaid: this.registrationForm.value.amountPaid,
         balance: this.outstandingAmount,
         createdBy: this.userInfo.id,
+        recieptReference : this.registrationForm.value.recieptReference,
         address: {
           id: uuid.v4(),
           streetName: this.registrationForm.value.streetAddress,

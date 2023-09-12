@@ -13,12 +13,12 @@
                                 <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
                                         <mat-label>Select Branch </mat-label>
-                                        <mat-select required>
-                                            <mat-option *ngFor="let branch of Branch" [value]="branch.name"
-                                                (click)="validateBranchSelection(branch)">{{branch.name}}</mat-option>
+                                        <mat-select required >
+                                            <mat-option *ngFor="let course of Branch" [value]="course.name"
+                                            (click)="validateBranchSelection(course)">{{course.name}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-
+                                  
                                 </div>
 
                             </div>
