@@ -1,6 +1,6 @@
 {
     "/api": {
-    "target": "http://localhost:44385",
-    "secure": false
+    "target": "https://mabushait.co.za:444/",
+    "secure": true
     }
 }

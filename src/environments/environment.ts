@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
-  //bhakiApi: 'https://bhakiapi.azurewebsites.net/',  
-  bhakiApi: 'https://localhost:44382/',  
+  //bhakiApi: 'https://localhost:44382//',  
+  bhakiApi: 'https://mabushait.co.za:444/',  
+  bhakiApiPort: '444'
 };

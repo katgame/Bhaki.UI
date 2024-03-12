@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  bhakiApi: 'https://bhakiapi.azurewebsites.net/'
+  bhakiApi: 'https://mabushait.co.za:444/',  
+  bhakiApiPort: '444'
 };
