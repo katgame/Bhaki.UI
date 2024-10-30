@@ -65,3 +65,35 @@ table {
     height: 5em;
   }
 }
+
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+  display: inline-table !important;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+.hint {
+  padding-left: 18px;
+  font-style: italic;
+}
+ng::deep {
+  mat-table {
+    display: inline-table !important;
+  }
+}
+
+mat-row{
+
+  cursor: pointer;
+}

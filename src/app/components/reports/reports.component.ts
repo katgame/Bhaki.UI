@@ -4,7 +4,9 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { HostService } from "app/service/bhaki-service";
 import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
+import { Registration } from "app/service/models/Registration";
 import { Router } from "@angular/router";
 
 const form = new FormGroup({
@@ -18,23 +20,33 @@ const form = new FormGroup({
     Validators.required,
   ]),
   dateRange: new FormControl({ value: "", disabled: false }),
+  idNumber: new FormControl({ value: "", disabled: false }),
 });
 
+export interface UserData {
+  id: string;
+  name: string;
+  progress: string;
+  color: string;
+}
 @Component({
   selector: "app-reports",
   templateUrl: "./reports.component.html",
   styleUrls: ["./reports.component.css"],
 })
 export class ReportsComponent implements OnInit, AfterViewInit {
-  @ViewChild("paginator") paginator: MatPaginator;
+
   displayedColumns: string[] = [
     "registrationNo",
     "studentName",
     "registrationDate",
+    "createdDate",
     "registeredBy",
     "courseName",
     "branchName",
+    "idNumber"
   ];
+  //displayedColumns = ['id', 'name', 'progress', 'color'];
 
   Branch: any = [];
   selectedBranch: any;
@@ -51,23 +63,35 @@ export class ReportsComponent implements OnInit, AfterViewInit {
     endDate: "endDate",
     branch: "branch",
     dateRange: "dateRange",
+    idNumber : "idNumber"
   };
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<Registration>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private bhakiService: HostService, private router: Router) {
     this.getBranches();
     this.reportsForm.disable();
+    this.reportsForm.controls["idNumber"].enable();
     this.enableFilters = false;
-    this.dataSource = new MatTableDataSource();
+
+    // this.dataSource = new MatTableDataSource(users);
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
   public reportsForm = form;
   ngOnInit() {
     this.showSpinner.subscribe((res) => {
       this.hideSpinner = res;
     });
+
+   
   //  this.getAllRegistration();
   }
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+  }
   getBranches() {
     this.showSpinner.next(true);
     this.bhakiService.getBranches().subscribe({
@@ -145,9 +169,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
                 this.showSpinner.next(false);
 
                 if (res) {
-                  this.results = res;
-                  this.dataSource.data = res;
-                  this.dataSource.paginator = this.paginator;
+                  this.updateData(res);
                 }
               },
               error: (err) => {
@@ -165,9 +187,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
                 this.showSpinner.next(false);
 
                 if (res) {
-                  this.results = res;
-                  this.dataSource.data = res;
-                  this.dataSource.paginator = this.paginator;
+                  this.updateData(res);
                 }
               },
               error: (err) => {
@@ -184,6 +204,14 @@ export class ReportsComponent implements OnInit, AfterViewInit {
       this.getAllRegistration();
     }
   }
+  updateData(data) {
+    this.results = data;
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: Registration, filter: string) => data.student.idNumber.indexOf(filter) != -1;
+    
+  }
 
   getAllRegistration() {
    // this.showSpinner.next(true);
@@ -192,9 +220,7 @@ export class ReportsComponent implements OnInit, AfterViewInit {
        this.showSpinner.next(false);
 
         if (res) {
-          this.results = res;
-          this.dataSource.data = res;
-          this.dataSource.paginator = this.paginator;
+          this.updateData(res);
         }
       },
       error: (err) => {
@@ -203,6 +229,30 @@ export class ReportsComponent implements OnInit, AfterViewInit {
         //this.notify.showNotification()
       },
     });
+  }
+
+  getAllRegistrationIdNumber() {
+    // this.showSpinner.next(true);
+     const id = this.reportsForm.value.idNumber;
+     this.bhakiService.getAllRegistrationsByIDNumber(id).subscribe({
+       next: (res) => {
+        this.showSpinner.next(false);
+ 
+         if (res) {
+           this.updateData(res);
+         }
+       },
+       error: (err) => {
+         this.showSpinner.next(false);
+         console.log(err);
+         //this.notify.showNotification()
+       },
+     });
+   }
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
   validateBranchSelection(branch: any) {

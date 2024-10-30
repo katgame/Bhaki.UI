@@ -125,6 +125,12 @@ export class HostService {
     return this.httpClient.get(this.hostService + 'api/Registration/get-all-registrations-by-branch-id/' + branchId, httpOptions);
   }
 
+  public getAllRegistrationsByIDNumber( IdNumber : any): Observable<any> {
+    const headers = {
+      ['Access-Control-Allow-Origin']: '*'
+    };
+    return this.httpClient.get(this.hostService + 'api/Registration/get-registration-details-by-id/' + IdNumber, httpOptions);
+  }
   public getAllRegistrationsByRange(start: any, end: any): Observable<any> {
     const headers = {
       ['Access-Control-Allow-Origin']: '*'

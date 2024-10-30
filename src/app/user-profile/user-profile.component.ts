@@ -51,6 +51,7 @@ const form = new FormGroup({
   postalCode: new FormControl({ value: "", disabled: false }, [
     Validators.required,
   ]),
+  registrationDate: new FormControl({ value: "", disabled: false }),
   idDocument: new FormControl({ value: "", disabled: false }),
   recieptReference: new FormControl({ value: "", disabled: false }),
 });
@@ -86,6 +87,7 @@ export class UserProfileComponent implements OnInit {
     course: "course",
     idDocument: "idDocument",
     recieptReference: "recieptReference",
+    registrationDate :"registrationDate"
   };
   hideSpinner = true;
   public showSpinner: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -143,6 +145,7 @@ export class UserProfileComponent implements OnInit {
         balance: this.outstandingAmount,
         createdBy: this.userInfo.id,
         recieptReference : this.registrationForm.value.recieptReference,
+        registrationDate : this.registrationForm.value.registrationDate,
         address: {
           id: uuid.v4(),
           streetName: this.registrationForm.value.streetAddress,
@@ -152,6 +155,7 @@ export class UserProfileComponent implements OnInit {
           postalCode: this.registrationForm.value.postalCode,
         },
       };
+  
       this.showSpinner.next(true);
       this.bhakiService.createRegitration(request).subscribe({
         next: (res) => {
@@ -198,6 +202,7 @@ export class UserProfileComponent implements OnInit {
       this.registrationForm.controls["line2"].disable();
       this.registrationForm.controls["postalCode"].disable();
       this.registrationForm.controls["idDocument"].disable();
+      this.registrationForm.controls["registrationDate"].disable();
     } else {
       this.registrationForm.controls["firstName"].enable();
       this.registrationForm.controls["lastName"].enable();
@@ -214,6 +219,7 @@ export class UserProfileComponent implements OnInit {
       this.registrationForm.controls["line2"].enable();
       this.registrationForm.controls["postalCode"].enable();
       this.registrationForm.controls["idDocument"].enable();
+      this.registrationForm.controls["registrationDate"].enable();
     }
   }
   getOustandingAmount() {

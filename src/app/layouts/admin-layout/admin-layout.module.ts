@@ -3,6 +3,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { AllBranchesComponent } from 'app/components/branches/branches-all/branches-all.component';
 import { BranchesEditComponent } from 'app/components/branches/branches-edit/branches-edit.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserModule} from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { LoginFormComponent } from 'app/components/login/login-form.component';
@@ -14,6 +16,7 @@ import {MatInputModule} from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatRippleModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NgModule } from '@angular/core';
@@ -38,9 +41,11 @@ import { ViewRegistrationComponent } from 'app/registration-find/registration-vi
     MatTooltipModule,
     MatIconModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
   declarations: [
+
     DashboardComponent,
     UserProfileComponent,
     ReportsComponent,
